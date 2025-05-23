@@ -1,0 +1,50 @@
+body{
+    background-color: #fff; 
+    color: slategrey; 
+    font-family: arial; 
+} 
+
+p {
+    font-size: 14px; 
+    line-height: 1.6; 
+}
+
+h1 {
+    font-weight: normal; 
+    background: aliceblue; 
+    margin: 0; 
+    line-height: 3; 
+    text-align: center; 
+} 
+
+h2, h3, h4, h5 {
+    font-weight: normal; 
+    background: aliceblue; 
+    margin: 0; 
+} 
+
+a, a:visited {
+    color: slategrey; 
+    text-decoration: none; 
+} 
+
+title {
+    background-color: #dbdfe8; 
+} 
+
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+} 
+
+.margined-text {
+    margin-left: 40px;
+    margin-right: 40px;
+} 
+
+nav {
+  text-align: center;
+}
+
