@@ -1,11 +1,18 @@
+<!-- 
+File: quote.html
+Author: Emily Yang (eyang4@bu.edu), 5/22/2025
+Description: the main web page, that will show a single quote along with an image, 
+each selected at random from a hard-coded list written in the Python code. 
+--> 
+
 {% extends "quotes/base.html" %}
 {% block title %}Quote{% endblock %} 
 
 {% block content %}
-        <h2> Quote </h2> 
+    <h2> Quote </h2> 
 
-        <p style="margin-left: 500px; "> 
-            "{{quote}}."    <br> 
-        </p> 
-        <img src={{image}} alt="Marie Curie" style="height:600px;" class="center">       
+    <p style="margin-left: 500px; "> 
+        "{{quote}}."    <br> 
+    </p> 
+    <img src={{image}} alt="Marie Curie" style="height:600px;" class="center">       
 {% endblock %}

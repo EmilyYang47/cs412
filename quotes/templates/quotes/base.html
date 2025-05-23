@@ -1,3 +1,10 @@
+<!-- 
+File: base.html
+Author: Emily Yang (eyang4@bu.edu), 5/22/2025
+Description: a base page that provides a header and navigation for the page, 
+as well as including any necessary style information. 
+--> 
+
 {% load static %}
 <html lang="en">
     <head>
@@ -7,11 +14,11 @@
     <body>
         <header>
             <h1>Marie Curie</h1>
-            <nav>
-                <a href="{% url 'quote_page' %}">Quote</a> |
-                <a href="{% url 'show_all_page' %}">Show All</a> |
-                <a href="{% url 'about_page' %}">About</a>
-            </nav>
+                <nav>
+                    <a href="{% url 'quote_page' %}">Quote</a> |
+                    <a href="{% url 'show_all_page' %}">Show All</a> |
+                    <a href="{% url 'about_page' %}">About</a>
+                </nav>
             <hr>
         </header>
 

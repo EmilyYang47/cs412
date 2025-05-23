@@ -1,15 +1,22 @@
+<!-- 
+File: show_all.html
+Author: Emily Yang (eyang4@bu.edu), 5/22/2025
+Description: the show_all web page, which show all of the quotes and images. 
+--> 
+
 {% extends "quotes/base.html" %}
 {% block title %}Show All{% endblock %} 
 
 {% block content %}
-        <h2> Show All </h2> 
+    <h2> Show All </h2> 
 
-        <p style="margin-left: 500px; "> 
-            {% for quote in quotes %}
-                "{{quote}}" <br> 
-            {% endfor %} 
-        </p> 
-        {% for image in images %}
-            <img src={{image}} alt="Marie Curie" style="height:600px;" class="center"> <br>
+    <p style="margin-left: 500px; "> 
+        {% for quote in quotes %}
+            "{{quote}}" <br> 
         {% endfor %} 
+    </p> 
+
+    {% for image in images %}
+    <img src={{image}} alt="Marie Curie" style="height:600px;" class="center"> <br>
+    {% endfor %} 
 {% endblock %}

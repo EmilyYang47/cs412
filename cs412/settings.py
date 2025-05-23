@@ -1,3 +1,7 @@
+# File: settings.py
+# Author: Emily Yang (eyang4@bu.edu), 5/22/2025
+# Description: The settings file which controls the settings of webapp and deployment.  
+
 """
 Django settings for cs412 project.
 
@@ -11,6 +15,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+
+import os
+import socket 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -61,6 +68,7 @@ TEMPLATES = [
         'OPTIONS': { 
             "string_if_invalid": " WARNING: {{%s}} not a valid context variable.", 
             'context_processors': [
+                "django.template.context_processors.debug",
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -124,10 +132,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-import os
-import socket
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -143,3 +147,5 @@ if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
 else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
+
+
