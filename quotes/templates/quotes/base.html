@@ -1,0 +1,28 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <title>{% block title %}Marie Curie Quotes{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <header>
+            <h1>Marie Curie</h1>
+            <nav>
+                <a href="{% url 'quote_page' %}">Quote</a> |
+                <a href="{% url 'show_all_page' %}">Show All</a> |
+                <a href="{% url 'about_page' %}">About</a>
+            </nav>
+            <hr>
+        </header>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer>
+            <hr> 
+            Creator of this web application: Emily Yang             
+        </footer>
+    </body>
+</html>

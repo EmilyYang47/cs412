@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-36km783+)00scpxb7=k0l_v(2=nl$*#inghfd74(r!l!kh3ci=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cs-webapps.bu.edu']
+ALLOWED_HOSTS = ['cs-webapps.bu.edu', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "hw", #NEW 
+    "quotes", 
+    "statics",  
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
-        'OPTIONS': {
+        'OPTIONS': { 
+            "string_if_invalid": " WARNING: {{%s}} not a valid context variable.", 
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -126,10 +130,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = 'static/' # note: no leading slash!
+STATIC_URL = 'statics/' # note: no leading slash!
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "statics"),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -139,5 +143,16 @@ import socket
 CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
 
 if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
-    STATIC_URL = '/eyang4/static/'
+    STATIC_URL = '/eyang4/statics/'
     MEDIA_URL = '/eyang4/media/'
+
+
+
+STATIC_URL = 'statics/' # note: no leading slash
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "statics"),
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL= "media/"  

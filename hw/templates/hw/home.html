@@ -1,0 +1,19 @@
+{% load static%}
+<html> 
+    <head> 
+        <title>Hello, world!</title> 
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head> 
+    <body> 
+        <h1> Hello, World!</h1> 
+
+        <p> 
+            Lorem ipsum dolor sit
+        </p> 
+        <footer> 
+            The current time is {{time}}. <br> 
+            This page has been brought to you by the letters 
+            {{letter1}} and {{letter2}}, and by the number {{number}}. 
+        </footer> 
+    </body> 
+</html> 
