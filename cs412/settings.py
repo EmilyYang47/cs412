@@ -130,7 +130,7 @@ import socket
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "statics"),
+    os.path.join(BASE_DIR, "static"),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -138,8 +138,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
 
 if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
-    STATIC_URL = '/eyang4/statics/'
+    STATIC_URL = '/eyang4/static/'
     MEDIA_URL = '/eyang4/media/'
 else:
-    STATIC_URL = '/statics/'
+    STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
