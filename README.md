@@ -1,5 +1,7 @@
 <mark>setup project structures for first example/assignment</mark>
-change into development directory <br /> 
+change into development directory 
+
+
 `cd django` <br /> 
 start virtual environment <br /> 
 `pipenv shell` <br /> 
