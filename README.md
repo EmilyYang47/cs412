@@ -18,8 +18,8 @@ create a new app: <br />
 `python manage.py startapp hw` 
 
 cs412/settings.py: ## add "hw" to list of INSTALLED_APPS <br />
-```INSTALLED_APPS = [
-	"hw", # new app
+```INSTALLED_APPS = [ <br />
+	"hw", # new app <br />
 ]```
 
 cs412/urls.py: ## add include, 'hw' path to urls file <br />
