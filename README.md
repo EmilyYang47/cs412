@@ -1,8 +1,8 @@
 <mark>setup project structures for first example/assignment</mark>
-change into development directory
-`cd django` 
-start virtual environment
-`pipenv shell`
+change into development directory <br /> 
+`cd django` <br /> 
+start virtual environment <br /> 
+`pipenv shell` <br /> 
 # start a new project:
 django-admin startproject cs412 .  ## note the trailing dot ##
 
