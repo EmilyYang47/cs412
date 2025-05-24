@@ -1,0 +1,42 @@
+<!-- 
+File: confirmation.html
+Author: Emily Yang (eyang4@bu.edu), 5/24/2025
+Description: a confirmation page to display after the order is placed. 
+The confirmation page will display which items were ordered, 
+the customer information, and the expected time at which the order will be ready 
+--> 
+
+{% extends "restaurant/base.html" %}
+{% block title %}About{% endblock %} 
+
+{% block content %}
+<h2> Confirmation page </h2>        
+
+<div style="margin-left: 300px;" >
+    <p> 
+        Hi, {{name}}! 
+    </p> 
+
+    <h5>You have ordered: </h5>
+    <p style="margin-left: 300px;"> 
+        {% for dish in selected_dishes %}
+        {{dish}} 
+        <br> 
+        {% endfor %} 
+    </p>
+
+    <h5 style="margin-right: 300px;">
+        The total price of your order is: {{total_price}}. <br> 
+        Your order will be ready by {{ready_time}}! 
+        <br><br> 
+        Your special instructions: {{special_instructions}} <br> 
+        Your contact information: <br> 
+        Name: {{name}} <br> 
+        Phone: {{phone}} <br> 
+        Email: {{email}} <br> 
+    </h5>
+</div> 
+
+
+{% endblock %}    
+

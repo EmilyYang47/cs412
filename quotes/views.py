@@ -5,7 +5,6 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 
-import time 
 import random 
 
 # the images of Marie Curie 

@@ -1,0 +1,31 @@
+<!-- 
+File: main.html
+Author: Emily Yang (eyang4@bu.edu), 5/24/2025
+Description: the page with basic information about the restaurant. 
+--> 
+
+{% extends "restaurant/base.html" %}
+{% block title %}About{% endblock %} 
+
+{% block content %}
+<h2> Wellcome to Emily's Restaurant </h2>   
+<br>  
+
+<img src="https://static01.nyt.com/images/2014/04/01/dining/lamb-cumin-scallions/lamb-cumin-scallions-jumbo.jpg?quality=75&auto=webp" alt="lamb" style="height:500px;" class="center"> 
+
+<p style="margin-left: 30px; margin-right: 80px;"> 
+    Location: 610 Beacon St, Boston, MA 02215 
+    <br><br> 
+    
+    Hours of operation: 
+    <p style="margin-left: 70px; margin-right: 80px;"> 
+        Saturday 7-10 PM <br>
+        Sunday 7-10 PM <br>
+        Monday 9 AM-5 PM, 7-10 PM <br>
+        Tuesday	9 AM-5 PM, 7-10 PM <br>
+        Wednesday 9 AM-5 PM, 7-10 PM <br>
+        Thursday 9 AM-5 PM, 7-10 PM <br>
+        Friday 9 AM-5 PM, 7-10 PM <br> 
+    </p> 
+</p> 
+{% endblock %}    

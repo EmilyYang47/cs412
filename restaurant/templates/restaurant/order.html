@@ -1,0 +1,86 @@
+<!-- 
+File: order.html
+Author: Emily Yang (eyang4@bu.edu), 5/24/2025
+Description: the order page with menu and online order form. 
+--> 
+
+{% extends "restaurant/base.html" %}
+{% block title %}About{% endblock %} 
+
+{% block content %}
+<h2> Order </h2>  
+<br> 
+
+<form action="{% url 'confirmation' %}" method="POST" style="margin-left: 200px; margin-right: 180px;"> 
+    {% csrf_token %} 
+    <h1> Daily Special </h1> 
+
+    <input type="checkbox" name="daily_special">
+    {{ daily_special_name }} - ${{ daily_special_price }}  <br>
+    <img src={{daily_special_image}} alt="daily_special" style="height:500px;" class="center"> 
+    <br> 
+
+    <!-- Hidden fields to pass info to submit function -->
+    <input type="hidden" name="daily_special_name" value="{{ daily_special_name }}">
+    <input type="hidden" name="daily_special_price" value="{{ daily_special_price }}">
+
+    <h1> Others </h1>
+
+    <input type="checkbox" name="dry_pot">
+    Mala Dry Pot - $18.00 <br> 
+    <input type="checkbox" name="dry_pot_vege" style="margin-left: 240px;">
+    Extra vegetables - $1.25 <br> 
+    <input type="checkbox" name="dry_pot_potato" style="margin-left: 240px;">
+    Extra potatoes - $1.25 <br> 
+    <input type="checkbox" name="dry_pot_beef" style="margin-left: 240px;">
+    Extra beef - $1.50 <br> 
+    <input type="checkbox" name="dry_pot_lamb" style="margin-left: 240px;">
+    Extra lamb - $1.50 <br> 
+    <input type="checkbox" name="dry_pot_shrimp" style="margin-left: 240px;">
+    Extra shrimp - $1.75 <br> <br> 
+    <img src="https://lh3.googleusercontent.com/p/AF1QipM8ZYLCMApUNkkwa8ERlMFUiivWGrsTfjWQsVul=w289-h376-p-k-n" alt="dry_pot" style="height:500px;" class="center"> 
+    <br> 
+
+    <input type="checkbox" name="cold_noodle">
+    Sichuan Cold Noodle - $9.00  <br>
+    <img src="https://thewoksoflife.com/wp-content/uploads/2022/06/sour-spicy-noodles-suanla-leng-mian-7.jpg" alt="cold_noodle" style="height:500px;" class="center"> 
+    <br> 
+
+    <input type="checkbox" name="lamb">
+    Chili and Cumin Flavored Dried Lamb - $20.00 <br>
+    <img src="https://static01.nyt.com/images/2014/04/01/dining/lamb-cumin-scallions/lamb-cumin-scallions-jumbo.jpg?quality=75&auto=webp" alt="lamb" style="height:500px;" class="center"> 
+    <br> 
+
+    <input type="checkbox" name="dan_dan_noodles">
+    Dan Dan Noodles - $12.00<br>
+    <img src="https://redhousespice.com/wp-content/uploads/2017/02/Dan-dan-noodles-5-1367x2048.jpg" alt="dan_dan_noodles" style="height:500px;" class="center"> 
+    <br> 
+
+    <input type="checkbox" name="di_san_xian">
+    Di San Xian - $15.00  <br> 
+    <img src="https://redhousespice.com/wp-content/uploads/2024/05/stir-fried-eggplant-potato-pepper-6-scaled.jpg" alt="di_san_xian" style="height:500px;" class="center"> 
+    <br> 
+
+    <input type="checkbox" name="stir_fry">
+    Tomato Egg Stir Fry - $15.00 <br> 
+    <img src="https://twoplaidaprons.com/wp-content/uploads/2022/06/tomato-egg-sitr-fry.jpg" alt="stir_fry" style="height:500px;" class="center"> 
+    <br> 
+
+    <input type="checkbox" name="tofu">
+    Mapo Tofu - $17.00 <br> 
+    <img src="https://www.cookerru.com/wp-content/uploads/2022/06/mapo-tofu-1-feature.jpg" alt="tofu" style="height:500px;" class="center"> 
+    <br> 
+
+    <h1> Special Instructions & Contact Information Cllection </h1> <br>
+    Special Instructions: <input type="text" name="instructions"> <br><br>
+    Name: <input type="text" name="name"> 
+    Phone: <input type="text" name="phone"> 
+    Email: <input type="text" name="email"> 
+    <br><br>
+    
+    <input type="submit"> 
+
+</form> 
+
+{% endblock %}    
+
