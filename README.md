@@ -1,4 +1,4 @@
-<mark>setup project structures for first example/assignment</mark> 
+# <mark>setup project structures for first example/assignment</mark> 
 
 change into development directory <br />
 `cd django` 
@@ -45,7 +45,10 @@ urlpatterns = [
 ]
 ```
 modify hw/views.py 
+
 create template/hw to store all html files 
+
 create directory static/styles.css 
+
 modify settings.py 
 
