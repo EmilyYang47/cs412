@@ -46,7 +46,7 @@ urlpatterns = [
 ```
 modify hw/views.py 
 
-create template/hw to store all html files 
+create templates/hw to store all html files 
 
 create directory static/styles.css 
 
