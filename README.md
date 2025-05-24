@@ -1,26 +1,28 @@
-<mark>setup project structures for first example/assignment</mark>
-change into development directory 
+<mark>setup project structures for first example/assignment</mark> 
 
+change into development directory <br />
+`cd django` 
 
-`cd django` <br /> 
 start virtual environment <br /> 
-`pipenv shell` <br /> 
-# start a new project:
-django-admin startproject cs412 .  ## note the trailing dot ##
+`pipenv shell`
 
-# run the server to check that everything works!
-python manage.py runserver
-# stop the server with CONTROL-C 
+start a new project: <br /> 
+`django-admin startproject cs412 .`  ## note the trailing dot ##
 
-# create a new app:
-python manage.py startapp hw 
+run the server to check that everything works! <br />
+`python manage.py runserver` 
 
-## cs412/settings.py: ## add "hw" to list of INSTALLED_APPS
-INSTALLED_APPS = [
+stop the server with CONTROL-C	
+
+create a new app: <br />
+`python manage.py startapp hw` 
+
+cs412/settings.py: ## add "hw" to list of INSTALLED_APPS <br />
+```INSTALLED_APPS = [
 	"hw", # new app
-]
+]```
 
-## cs412/urls.py: ## add include, 'hw' path to urls file
+cs412/urls.py: ## add include, 'hw' path to urls file <br />
 from django.contrib import admin
 from django.urls import path, include
 
