@@ -1,3 +1,9 @@
+<!-- 
+File: show_profile.html
+Author: Emily Yang (eyang4@bu.edu), 5/27/2025
+Description: a show_profile page to display profile informations of the selected user. 
+--> 
+
 {% extends 'mini_fb/base.html' %} 
 
 {% block content %} 
@@ -5,7 +11,7 @@
 <br> 
 
 <div style="margin-left: 280px; margin-right: 250px;"> 
-    
+
         <table>
             <tr>
                 <th>First Name</th>
@@ -23,12 +29,7 @@
                 <td><img src="{{profile.profile_image_url}}" alt="" style="height:300px;" class="center"></td> 
             </tr> 
 
-        </table>
-
-
-
-
-    
+        </table> 
 
 </div> 
 {% endblock %} 

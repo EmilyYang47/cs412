@@ -1,18 +1,8 @@
+# File: models.py 
+# Author: Emily Yang (eyang4@bu.edu), 5/27/2025
+# Description: The models python file which defines the database. 
+
 from django.db import models
-
-# Create your models here.
-# In the models.py file, create a model called Profile, 
-# which will model the data attributes of individual Facebook users.
-
-# This Profile model will need to include the following data attributes: 
-# first name, 
-# last name, 
-# city, 
-# email address, 
-# and a profile image url.
-
-# Use the Django admin to create 5 sample profiles, 
-# with names/data of your choosing. You do NOT need to reproduce the exact data from the example above. 
 
 class Profile(models.Model): 
     '''Encapsulate the data of an individual Facebook user. ''' 
