@@ -9,7 +9,7 @@ class ShowAllView(ListView):
     '''Define a view class to show all blog Articles. '''
 
     model = Article 
-    template_name = "blog/show_all.html"
+    template_name = "blog/show_all_article.html"
     context_object_name = 'articles'
     
 class ArticleView(DetailView): 
