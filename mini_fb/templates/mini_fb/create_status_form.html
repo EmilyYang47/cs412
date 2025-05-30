@@ -1,0 +1,29 @@
+{% extends 'mini_fb/base.html' %} 
+
+{% block content %} 
+
+<h1> Post a status message for {{profile.first_name}} {{profile.last_name}} </h1> 
+<br> 
+
+<form method = 'POST' style="margin-left: 400px; margin-right: 250px;"> 
+{% csrf_token %} 
+
+    <table > 
+        {% for field in form %} 
+            <tr> 
+                <th>{{field.name}}</th>
+                <td>{{field}}</td>
+            </tr>
+        {% endfor %} 
+
+        <tr>
+            <td></td> 
+            <td>
+                <input type='submit' name = 'Add Status Message!' value= 'add status message'>
+            </td>
+        </tr>
+
+    </table>
+</form> 
+
+{% endblock %} 
