@@ -1,6 +1,6 @@
 # File: admin.py 
 # Author: Emily Yang (eyang4@bu.edu), 5/27/2025
-# Description: The admin python file which registers the Profile model to admin. 
+# Description: The admin python file which registers the models to admin. 
 
 from django.contrib import admin 
 

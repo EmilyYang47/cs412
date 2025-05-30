@@ -67,7 +67,7 @@ class CreateStatusMessageView(CreateView):
         return super().form_valid(form) 
     
     def get_success_url(self): 
-        '''Provide a URL to redirect tot after creating a new COmment. ''' 
+        '''Provide a URL to redirect to after creating a new status message. ''' 
 
         # create and return a URL: 
         # retrieve the PK from the URL pattern 
