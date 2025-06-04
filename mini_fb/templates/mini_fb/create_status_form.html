@@ -11,7 +11,7 @@ Description: a create_status_form page to display the HTML form to create a new 
 <h1> Post a status message for {{profile.first_name}} {{profile.last_name}} </h1> 
 <br> 
 
-<form method = 'POST' style="margin-left: 400px; margin-right: 250px;"> 
+<form method = 'POST' enctype="multipart/form-data" style="margin-left: 400px; margin-right: 250px;"> 
 {% csrf_token %} 
 
     <table > 
@@ -25,11 +25,23 @@ Description: a create_status_form page to display the HTML form to create a new 
         <tr>
             <td></td> 
             <td>
+                <input type="file" name = "files" multiple/>
+            </td>
+        </tr>
+        
+        <tr>
+            <td></td> 
+            <td>
                 <input type='submit' name = 'Add Status Message!' value= 'add status message'>
             </td>
         </tr>
 
     </table>
 </form> 
+
+<form action="{% url 'show_profile' profile.pk %}" method='GET' style="margin-left: 400px; margin-right: 250px;">
+    <input type="submit" value="Cancel"> 
+</form> 
+
 
 {% endblock %} 
