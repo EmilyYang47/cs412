@@ -118,7 +118,7 @@ class DeleteStatusMessageView(DeleteView):
 
         status_message = StatusMessage.objects.get(pk=pk)
         
-        # find the article to which this Comment is related by FK
+        # find the profile to which this status is related by FK
         profile = status_message.profile 
 
         # call reverse to generate the URL for this Profile 
@@ -141,7 +141,7 @@ class UpdateStatusMessageView(UpdateView):
 
         status_message = StatusMessage.objects.get(pk=pk)
         
-        # find the article to which this Comment is related by FK
+        # find the profile to which this status is related by FK
         profile = status_message.profile 
 
         # call reverse to generate the URL for this Profile 

@@ -51,8 +51,6 @@ class StatusMessage(models.Model):
         return images 
 
 
-
-
 class Image(models.Model): 
     '''Encapsulate the idea of an image file of a profile. ''' 
 
@@ -65,6 +63,7 @@ class Image(models.Model):
     def __str__(self): 
         '''return a string representation of this instance'''
         return f'{self.image_file} -> {self.profile}' 
+
 
 class StatusImage(models.Model): 
     '''Encapsulate the status image. ''' 
