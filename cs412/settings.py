@@ -152,8 +152,3 @@ else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 
-
-# declarations to reference media files 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/') 
-MEDIA_URL = "/media/" 
-
