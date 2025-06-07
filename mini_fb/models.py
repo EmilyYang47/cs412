@@ -28,7 +28,52 @@ class Profile(models.Model):
     def get_absolute_url(self): 
         '''Return the URL to display one instance of this model. ''' 
         return reverse('show_profile', kwargs={'pk': self.pk}) 
+    
+    def get_friends(self): 
+        '''Return a list of the friends' Profiles of this profile. ''' 
+        friend_pairs1 = Friend.objects.filter(profile1=self) 
+        friend_pairs2 = Friend.objects.filter(profile2=self) 
+        all_friends = [] 
 
+        for friend_pair in friend_pairs1: 
+            all_friends.append(friend_pair.profile2) 
+        for friend_pair in friend_pairs2: 
+            all_friends.append(friend_pair.profile1) 
+
+        return all_friends 
+    
+    def add_friend(self, other): 
+        '''takes a parameter other, which refers to another Profile instance, 
+        and add a Friend relation for other and self. ''' 
+
+        if self == other: 
+            print("cannot add self as friend")
+            return 
+        elif other in self.get_friends(): 
+            print("this friend pair already exist")
+            return 
+        else: 
+            new_friend = Friend(profile1=self, profile2=other) 
+            new_friend.save() 
+            return 
+
+    def get_friend_suggestions(self): 
+        '''return a list of possible friends for this Profile. ''' 
+        friend_seggestions = [] 
+        friends = self.get_friends() 
+        all_other_profiles = Profile.objects.all().exclude(pk=self.pk) 
+
+        for profile in all_other_profiles: 
+            # if profile is not in self's friend list AND if profile has 
+            # at least one common friend with self, add it to the friend_seggestions 
+            if profile not in friends: 
+                profile_friends = profile.get_friends() 
+                for profile_friend in profile_friends: 
+                    if profile_friend in friends: 
+                        print("FOUND COMMON FRIEND") 
+                        friend_seggestions.append(profile) 
+                        break 
+        return friend_seggestions 
     
 class StatusMessage(models.Model): 
     '''Encapsulate the status message of a profile.''' 
@@ -75,4 +120,15 @@ class StatusImage(models.Model):
         return f'{self.image} -> {self.status_message}' 
     
 
+class Friend(models.Model): 
+    '''Encapsulate the idea of an edge connecting two nodes within the social network. '''
+    # data attributes of a StatusMessage: 
+    profile1 = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="profile1") 
+    profile2 = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="profile2") 
+    timestamp = models.DateTimeField(auto_now=True) 
+
+    def __str__(self): 
+        '''return a string representation of this instance'''
+        return f'{self.profile1.first_name} {self.profile1.last_name} & {self.profile2.first_name} {self.profile2.last_name}' 
     
+        

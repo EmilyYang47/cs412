@@ -3,10 +3,11 @@
 # Description: The views python file which creates the views to handle each page request.   
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView    
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView , View   
 from .models import * 
 from .forms import * 
 from django.urls import reverse 
+from django.http import HttpResponseRedirect 
 
 import random 
 
@@ -147,3 +148,36 @@ class UpdateStatusMessageView(UpdateView):
         # call reverse to generate the URL for this Profile 
         return reverse('show_profile', kwargs={'pk':profile.pk}) 
     
+
+class AddFriendView(View): 
+    '''A view to handle the add friend request. ''' 
+
+    def dispatch(self, request, *args, **kwargs): 
+        '''call the Profile's add_friend method. '''
+
+        # retrieve the PK from the URL pattern 
+        pk = self.kwargs['pk']
+        other_pk = self.kwargs['other_pk'] 
+
+        # Get the profiles
+        self_profile = Profile.objects.get(pk=pk) 
+        other_profile = Profile.objects.get(pk=other_pk) 
+
+        # Add friend
+        self_profile.add_friend(other_profile) 
+        return HttpResponseRedirect(self.get_success_url())
+    
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after adding the new friend. ''' 
+
+        # create and return a URL: 
+        # retrieve the PK from the URL pattern 
+        pk = self.kwargs['pk'] 
+        # call reverse to generate the URL for this Profile 
+        return reverse('show_profile', kwargs={'pk':pk}) 
+
+class ShowFriendSuggestionsView(DetailView): 
+    '''Define a view class to show the friend suggestions for a single Profile. ''' 
+    model = Profile 
+    template_name = "mini_fb/friend_suggestions.html" 
+    context_object_name = 'profile' 

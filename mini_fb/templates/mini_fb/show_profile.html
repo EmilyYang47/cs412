@@ -9,11 +9,12 @@ Description: a show_profile page to display profile informations of the selected
 {% block content %} 
 <h1>{{profile.first_name}} {{profile.last_name}}</h1> 
 
-<div style="margin-left: 280px; margin-right: 250px;">  
+<div style="margin-left: 200px; margin-right: 250px;">  
     <u> 
-        <p style="margin-left: 280px;">
+        <p style="margin-left: 250px;">
             <b><a href="{% url 'update_profile' profile.pk %}">Update Profile | </a></b> 
-            <b><a href="{% url 'create_status' profile.pk %}">Create a Status Message</a></b> 
+            <b><a href="{% url 'create_status' profile.pk %}">Create a Status Message | </a></b>  
+            <b><a href="{% url 'show_friend_suggestions' profile.pk %}">show Friend Suggestions</a></b> 
         </p> 
     </u> 
 
@@ -58,4 +59,19 @@ Description: a show_profile page to display profile informations of the selected
     </table> 
 
 </div> 
+
+<h1> Friends </h1>
+{% if profile.get_friends %} 
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+        {% for friend in profile.get_friends %} 
+            <div style="text-align: center;"> 
+                <a href="{% url 'show_profile' friend.pk %}"> 
+                    <img src="{{friend.profile_image_url}}" alt="" style="height:150px;" > <br>
+                    <p> {{friend.first_name}} {{friend.last_name}} </p> 
+                </a>
+            </div> 
+        {% endfor %} 
+    </div>
+{% endif %}   
+
 {% endblock %} 
