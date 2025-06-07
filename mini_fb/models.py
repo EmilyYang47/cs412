@@ -70,10 +70,22 @@ class Profile(models.Model):
                 profile_friends = profile.get_friends() 
                 for profile_friend in profile_friends: 
                     if profile_friend in friends: 
-                        print("FOUND COMMON FRIEND") 
                         friend_seggestions.append(profile) 
                         break 
         return friend_seggestions 
+    
+    def get_news_feed(self): 
+        '''return a list of all StatusMessages for this profile and all of the friends of this profile. ''' 
+        news_feed = self.get_status_messages() 
+        all_friends = self.get_friends() 
+
+        for friend in all_friends: 
+            news_feed = news_feed | friend.get_status_messages()     
+        print(news_feed) 
+        print(news_feed.order_by('-timestamp'))
+        news_feed = news_feed.order_by('-timestamp')
+        return news_feed  
+
     
 class StatusMessage(models.Model): 
     '''Encapsulate the status message of a profile.''' 

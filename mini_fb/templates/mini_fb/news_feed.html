@@ -1,0 +1,46 @@
+<!-- 
+File: news_feed.html
+Author: Emily Yang (eyang4@bu.edu), 6/6/2025
+Description: a news_feed page to display the news feed for a single Profile. 
+The news feed shows each StatusMessage, along with the profile image and name of the person who wrote it. 
+--> 
+
+{% extends 'mini_fb/base.html' %} 
+
+{% block content %} 
+<h1>News Feed For {{profile.first_name}} {{profile.last_name}}: </h1> 
+
+<u> 
+    <p style="text-align: center;">
+        <b><a href="{% url 'show_profile' profile.pk %}">Return to Profile Page</a></b> 
+    </p> 
+</u> 
+<br> 
+
+{% if profile.get_news_feed %} 
+    <div style="justify-content: center;"> 
+        {% for news in profile.get_news_feed %} 
+            <div style="text-align: center;">                 
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;"> 
+                    <img src="{{news.profile.profile_image_url}}" alt="" style="height:50px;" > 
+                    <p> <b> {{news.profile.first_name}} {{news.profile.last_name}} </b> {{news.timestamp}}</p> 
+                </div>
+
+                <p> {{news.message}} </p> 
+                {% if news.get_images %} 
+                    {% for img in news.get_images %}
+                        <img src="{{img.image_file.url}}" alt="" style="height:250px;" > <br> 
+                        <br> 
+                    {% endfor %}
+                {% endif %}
+            </div> 
+            <hr style="margin-left: 170px; margin-right: 170px; "> 
+            <br> 
+        {% endfor %} 
+    </div>
+{% else %} 
+    <p> No News Feed So Far </p> 
+{% endif %}
+
+
+{% endblock %} 

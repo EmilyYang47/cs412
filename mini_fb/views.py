@@ -176,8 +176,17 @@ class AddFriendView(View):
         # call reverse to generate the URL for this Profile 
         return reverse('show_profile', kwargs={'pk':pk}) 
 
+
 class ShowFriendSuggestionsView(DetailView): 
     '''Define a view class to show the friend suggestions for a single Profile. ''' 
     model = Profile 
     template_name = "mini_fb/friend_suggestions.html" 
     context_object_name = 'profile' 
+
+
+class ShowNewsFeedView(DetailView): 
+    '''Define a view class to show the news feed for a single Profile. ''' 
+    model = Profile 
+    template_name = "mini_fb/news_feed.html" 
+    context_object_name = 'profile' 
+    
