@@ -4,6 +4,7 @@
 
 from django.db import models 
 from django.urls import reverse 
+from django.contrib.auth.models import User 
 
 class Profile(models.Model): 
     '''Encapsulate the data of an individual Facebook user. ''' 
@@ -14,6 +15,7 @@ class Profile(models.Model):
     email_address = models.TextField(blank=True) 
     profile_image_url = models.URLField(blank=True) 
     published = models.DateTimeField(auto_now=True) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 

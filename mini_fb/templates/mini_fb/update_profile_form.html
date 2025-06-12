@@ -10,7 +10,7 @@ Description: a update_profile_form page to display the HTML form to update a new
 <h1>Update the Profile</h1>
 
 <!-- display the HTML form --> 
-<form action="{% url 'update_profile' profile.pk %}" method="POST" enctype="multipart/form-data" style="margin-left: 400px; margin-right: 250px;" >
+<form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data" style="margin-left: 400px; margin-right: 250px;" >
     {% csrf_token %}
     <table>
         {{form.as_table}}

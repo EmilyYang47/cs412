@@ -20,7 +20,7 @@ a single Profile, along with links to add friends.
     <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
         {% for suggestion in profile.get_friend_suggestions %} 
             <div style="text-align: center;"> 
-                <form action="{% url 'add_friend' profile.pk suggestion.pk %}" method='GET'> 
+                <form action="{% url 'add_friend' suggestion.pk %}" method='GET'> 
                     <img src="{{suggestion.profile_image_url}}" alt="" style="height:150px;" > <br> 
                     <p> {{suggestion.first_name}} {{suggestion.last_name}} </p> 
                     <input type="submit" value="Add Friend"> 

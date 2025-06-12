@@ -18,9 +18,26 @@ as well as including any necessary style information.
             <h1> Mini Facebook</h1> 
             <nav> 
                 <ul>
-                    <a href="{% url 'show_all_profiles' %}"> All Profiles | </a> 
-                    <a href="{% url 'create_profile' %}"> Create Profile</a> 
+                    <a href="{% url 'show_all_profiles' %}"> All Profiles </a> 
+                    <!-- Add: URLs for authentication --> 
+                    {% if request.user.is_authenticated %}    
+                    <form action="{% url 'logout' %}" method="POST">
+                        {%csrf_token%}
+                        <input type="submit" value="Log Out">
+                    </form> 
+
+                    <!-- URLs for users who are not logged in -->
+                    {% else %} 
+                    <a href="{% url 'create_profile' %}"> | Create Profile | </a> 
+                    <a href="{% url 'login' %}">Login</a> 
+                    {% endif %} 
                 </ul> 
+                <hr> 
+                {% if request.user.is_authenticated %} 
+                Logged in as: {{request.user}} 
+                {% else %} 
+                Not logged in. 
+                {% endif %}
             </nav> 
         </head> 
 
