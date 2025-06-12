@@ -8,21 +8,24 @@ Description: a login page.
 
 {% block content %} 
 
-<h1>Login to mini fb</h1>
-<form action="{% url 'login' %}" method="POST" >
-    {% csrf_token %}
-    {{form}}
-    <input type="submit" value="Login"> 
-    <!-- This basic login form works, but after login in 
-     assumed the existance of a page ar /registration/profile, which 
-     does not exist. --> 
-    {% if request.GET.next %} 
-    <input type="hidden" name="next" value="{{request.GET.next}}"> 
-    {% else %} 
-    <input type="hidden" name="next" value="{% url 'show_all_profiles' %}"> 
-    {% endif %} 
-</form> 
+<h1>Login to mini fb</h1> <br> 
 
-<hr>
-Don't have an account? <a href="{% url 'register' %}">Register here</a>. 
+<div style="text-align: center;"> 
+    <form action="{% url 'login' %}" method="POST" >
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Login"> 
+        <!-- This basic login form works, but after login in 
+        assumed the existance of a page ar /registration/profile, which 
+        does not exist. --> 
+        {% if request.GET.next %} 
+        <input type="hidden" name="next" value="{{request.GET.next}}"> 
+        {% else %} 
+        <input type="hidden" name="next" value="{% url 'show_all_profiles' %}"> 
+        {% endif %} 
+    </form> 
+
+    Don't have an account? <a href="{% url 'create_profile' %}">Register here</a> 
+</div> 
+
 {% endblock %} 

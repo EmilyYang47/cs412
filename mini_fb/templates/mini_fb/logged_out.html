@@ -9,10 +9,12 @@ Description: a logout confirmation page, which includes a link to log in again (
 
 {% block content %} 
 
-<h1>You have successfully logged out</h1>
-<br> 
-<a href="{% url 'login' %}"> Login </a> 
+<h1>You have successfully logged out</h1> <br> 
 
-<hr>
-Don't have an account? <a href="{% url 'register' %}">Register here</a>. 
+<div style="text-align: center;"> 
+
+    <a href="{% url 'login' %}"> Login </a> 
+    <br> <br> 
+    Don't have an account? <a href="{% url 'create_profile' %}">Register here</a> 
+</div>
 {% endblock %} 

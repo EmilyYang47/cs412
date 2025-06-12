@@ -9,6 +9,8 @@ from .forms import *
 from django.urls import reverse 
 from django.http import HttpResponseRedirect 
 from django.contrib.auth.mixins import LoginRequiredMixin 
+from django.contrib.auth.forms import UserCreationForm 
+from django.contrib.auth import login 
 
 import random 
 
@@ -35,6 +37,34 @@ class CreateProfileView(CreateView):
     form_class = CreateProfileForm 
     template_name = "mini_fb/create_profile_form.html" 
 
+    def get_context_data(self): 
+        '''Return the dictionary of context variables for use in the templates. ''' 
+
+        # calling the superclass method 
+        context = super().get_context_data() 
+
+        # find/add the profile to the context data 
+        # retrieve the PK from the URL pattern 
+        user_creation_form = UserCreationForm
+
+        # add this profile into the context dictionary: 
+        context['user_creation_form'] = user_creation_form 
+        return context 
+    
+    def form_valid(self, form): 
+        '''a method to handle the form submission. ''' 
+
+        # Reconstruct the UserCreationForm instance from the self.request.POST data 
+        user_form = UserCreationForm(self.request.POST) 
+        user = user_form.save() 
+
+        # log the user in 
+        login(self.request, user) 
+        # attach the Django User to the Profile instance object 
+        form.instance.user = user 
+        # delegate the rest to the super class’ form_valid method. 
+        return super().form_valid(form)   
+    
     
 class UpdateProfileView(LoginRequiredMixin, UpdateView): 
     '''A view to update an Profile and save it to the database.'''
@@ -229,14 +259,3 @@ class LogoutConfirmationView(TemplateView):
 
 
 
-
-# class UserRegistrationView(CreateView):
-#     '''A view to show/process the registration form to create a new User.'''
-
-#     template_name = 'blog/register.html'
-#     form_class = UserCreationForm
-#     model = User
-    
-#     def get_success_url(self):
-#         '''The URL to redirect to after creating a new User.'''
-#         return reverse('blog_login') 
