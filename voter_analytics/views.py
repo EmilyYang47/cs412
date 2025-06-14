@@ -8,7 +8,8 @@ from django.views.generic import ListView, DetailView
 from . models import Voter
 
 import plotly
-import plotly.graph_objs as go #95736 
+import plotly.graph_objs as go 
+from django.db.models import Count 
 
 class VotersListView(ListView): 
     '''View to display voters. ''' 
@@ -35,7 +36,6 @@ class VotersListView(ListView):
         if 'party_affiliation' in self.request.GET:
             party_affiliation = self.request.GET['party_affiliation']
             if party_affiliation:
-                print("PARTYYYYYYYYYYYYY")
                 results = results.filter(party_affiliation=party_affiliation) 
 
         if 'min_birth_year' in self.request.GET: 
@@ -48,8 +48,6 @@ class VotersListView(ListView):
                     for year in years[1:]: 
                         selection = selection | results.filter(date_of_birth__contains=str(year)) 
                 results = selection 
-                print("MINNNNNNNNNNN")
-
                 
         if 'max_birth_year' in self.request.GET: 
             max_birth_year = self.request.GET['max_birth_year']
@@ -61,30 +59,21 @@ class VotersListView(ListView):
                     for year in years[1:]: 
                         selection = selection | results.filter(date_of_birth__contains=str(year)) 
                 results = selection 
-                print("MAXXXXXXXXXXX")
-
 
         if 'voter_score' in self.request.GET:
             voter_score = self.request.GET['voter_score']
             if voter_score:
                 results = results.filter(voter_score=voter_score) 
-                print("SCOREEEEEEEE")
-
 
         if 'v20state' in self.request.GET:
-            print("v20state")
             results = results.filter(v20state='TRUE')
         if 'v21town' in self.request.GET:
-            print("v21town")
             results = results.filter(v21town='TRUE')
         if 'v21primary' in self.request.GET:
-            print("v21primary")
             results = results.filter(v21primary='TRUE')
         if 'v22general' in self.request.GET:
-            print("v22general")
             results = results.filter(v22general='TRUE')
         if 'v23town' in self.request.GET:
-            print("v23town")
             results = results.filter(v23town='TRUE')
                 
         return results 
@@ -114,7 +103,6 @@ class GraphsListView(ListView):
         if 'party_affiliation' in self.request.GET:
             party_affiliation = self.request.GET['party_affiliation']
             if party_affiliation:
-                print("PARTYYYYYYYYYYYYY")
                 results = results.filter(party_affiliation=party_affiliation) 
 
         if 'min_birth_year' in self.request.GET: 
@@ -127,8 +115,6 @@ class GraphsListView(ListView):
                     for year in years[1:]: 
                         selection = selection | results.filter(date_of_birth__contains=str(year)) 
                 results = selection 
-                print("MINNNNNNNNNNN")
-
                 
         if 'max_birth_year' in self.request.GET: 
             max_birth_year = self.request.GET['max_birth_year']
@@ -140,30 +126,21 @@ class GraphsListView(ListView):
                     for year in years[1:]: 
                         selection = selection | results.filter(date_of_birth__contains=str(year)) 
                 results = selection 
-                print("MAXXXXXXXXXXX")
-
 
         if 'voter_score' in self.request.GET:
             voter_score = self.request.GET['voter_score']
             if voter_score:
                 results = results.filter(voter_score=voter_score) 
-                print("SCOREEEEEEEE")
-
 
         if 'v20state' in self.request.GET:
-            print("v20state")
             results = results.filter(v20state='TRUE')
         if 'v21town' in self.request.GET:
-            print("v21town")
             results = results.filter(v21town='TRUE')
         if 'v21primary' in self.request.GET:
-            print("v21primary")
             results = results.filter(v21primary='TRUE')
         if 'v22general' in self.request.GET:
-            print("v22general")
             results = results.filter(v22general='TRUE')
         if 'v23town' in self.request.GET:
-            print("v23town")
             results = results.filter(v23town='TRUE')
                 
         return results 
@@ -175,13 +152,10 @@ class GraphsListView(ListView):
         # start with superclass context
         context = super().get_context_data(**kwargs)
         v = context['v']            
-        from django.db.models import Count
-        from django.db.models.functions import Substr
 
         # create graph of voter distribution by year of birth as bar chart: 
 
         qs = self.get_queryset().exclude(date_of_birth__isnull=True)
-
         year_count_dict = {}
 
         for voter in qs:
@@ -208,10 +182,13 @@ class GraphsListView(ListView):
         context['graph_div_birth_year'] = graph_div_birth_year  
         
         # generate the Pie chart of voter distribution by party affiliation 
-        x= ['U ', 'D ', 'R ', 'CC', 'L ', 'T ', 'O ', 'G ', 'J ', 'Q ', 'FF'] 
-        y = [len(v.filter(party_affiliation=party)) for party in x]
+        party_counts = self.get_queryset().values('party_affiliation').annotate(count=Count('id'))
+        party_dict = {item['party_affiliation']: item['count'] for item in party_counts}
+
+        labels = ['U ', 'D ', 'R ', 'CC', 'L ', 'T ', 'O ', 'G ', 'J ', 'Q ', 'FF']
+        values = [party_dict.get(p, 0) for p in labels]
         
-        fig = go.Pie(labels=x, values=y) 
+        fig = go.Pie(labels=labels, values=values) 
         title_text = f"Voter Distribution by Party Affiliation"
         graph_div_party = plotly.offline.plot({"data": [fig], 
                                          "layout_title_text": title_text,
@@ -221,12 +198,13 @@ class GraphsListView(ListView):
         context['graph_div_party'] = graph_div_party 
 
         # create graph of voter distribution by year of birth as bar chart: 
+        qs = self.get_queryset()
         x= ['v20state', 'v21town', 'v21primary', 'v22general', 'v23town'] 
-        y = [len(v.filter(v20state='TRUE')), 
-             len(v.filter(v21town='TRUE')), 
-             len(v.filter(v21primary='TRUE')), 
-             len(v.filter(v22general='TRUE')), 
-             len(v.filter(v23town='TRUE'))
+        y = [len(qs.filter(v20state='TRUE')), 
+             len(qs.filter(v21town='TRUE')), 
+             len(qs.filter(v21primary='TRUE')), 
+             len(qs.filter(v22general='TRUE')), 
+             len(qs.filter(v23town='TRUE'))
             ]
         
         fig = go.Bar(x=x, y=y)
