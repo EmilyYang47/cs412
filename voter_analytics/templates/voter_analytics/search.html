@@ -7,7 +7,7 @@ Description: a search page that filters the voters.
 <h1>Search Form</h1>
 
 <table>
-<form action="{% url 'voters' %}">
+<form action="{% if request.resolver_match.url_name == 'graphs' %}{% url 'graphs' %}{% else %}{% url 'voters' %}{% endif %}">
 
     <!-- Party affiliation dropdown -->
     <tr>
