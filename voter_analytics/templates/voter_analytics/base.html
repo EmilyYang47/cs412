@@ -1,0 +1,30 @@
+<!-- 
+File: base.html
+Author: Emily Yang (eyang4@bu.edu), 6/14/2025
+Description: a base page that provides a header and navigation for the page, 
+as well as including any necessary style information. 
+--> 
+
+{% load static %}
+<html>
+    <head>
+        <title>Voter Analytics</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <header>
+            <h1>Voter Analytics</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'voters' %}">Home</a></li> 
+                    <li><a href="{% url 'graphs' %}">Graphs</a></li>
+                </ul>
+
+            </nav>
+        </header>
+    
+    {% block content %}
+    {% endblock %}    
+  
+    </body>
+</html>                                     

@@ -1,0 +1,40 @@
+<!-- 
+File: graphs.html
+Author: Emily Yang (eyang4@bu.edu), 6/14/2025
+Description: a graphs page that displays the graphs.      
+--> 
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %} 
+<div class="row">
+        {% include "voter_analytics/search.html" %}    
+</div> 
+
+<!-- # show the voter distribution by year of birth here: -->
+<div class="container">
+    <div class="row"> 
+        <p>
+            {{graph_div_birth_year|safe}}
+        </p> 
+    </div> 
+</div> 
+
+<!-- # show the voter distribution by party affiliation here: -->
+<div class="container">
+    <div class="row">
+        <!-- safe: render the HTML rather than display the HTML as text -->
+        {{graph_div_party|safe}} 
+    </div>
+</div> 
+    
+<!-- # show the vote count by election here: -->
+<div class="container">
+    <div class="row"> 
+        <p>
+            {{graph_div_election|safe}}
+        </p> 
+    </div> 
+</div> 
+
+{% endblock %}
