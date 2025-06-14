@@ -11,6 +11,9 @@ import plotly
 import plotly.graph_objs as go 
 from django.db.models import Count 
 
+YEARS = list(range(1915, 2026))  
+YEARS.reverse()  
+
 class VotersListView(ListView): 
     '''View to display voters. ''' 
 
@@ -93,14 +96,6 @@ class GraphsListView(ListView):
     template_name = 'voter_analytics/graphs.html'
     model = Voter 
     context_object_name = 'v' 
-
-    def get_context_data(self, **kwargs): 
-        '''provide context variables for use in template. '''
-        context = super().get_context_data(**kwargs)
-        years = list(range(1915, 2026))  
-        years.reverse()  
-        context['years'] = years
-        return context 
     
     def get_queryset(self):
         '''filter the voters ''' 
@@ -156,10 +151,12 @@ class GraphsListView(ListView):
     def get_context_data(self, **kwargs) :
         '''
         Provide context variables for use in template
-        '''
+        ''' 
+    
         # start with superclass context
         context = super().get_context_data(**kwargs)
         v = context['v']            
+        context['years'] = YEARS 
 
         # create graph of voter distribution by year of birth as bar chart: 
 
