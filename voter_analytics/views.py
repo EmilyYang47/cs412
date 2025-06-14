@@ -175,10 +175,27 @@ class GraphsListView(ListView):
         # start with superclass context
         context = super().get_context_data(**kwargs)
         v = context['v']            
+        from django.db.models import Count
+        from django.db.models.functions import Substr
 
         # create graph of voter distribution by year of birth as bar chart: 
-        x= list(range(1915, 2026)) 
-        y = [len(v.filter(date_of_birth__contains=str(year))) for year in x]
+
+        qs = self.get_queryset().exclude(date_of_birth__isnull=True)
+
+        year_count_dict = {}
+
+        for voter in qs:
+            dob = voter.date_of_birth.strip()
+            if '/' in dob:
+                parts = dob.split('/')
+                year = parts[-1]  
+                if year.isdigit():
+                    year = int(year)
+                    if 1915 <= year <= 2025:
+                        year_count_dict[year] = year_count_dict.get(year, 0) + 1
+
+        x = list(range(1915, 2026))
+        y = [year_count_dict.get(year, 0) for year in x]
         
         fig = go.Bar(x=x, y=y)
         title_text = f"Voter Distribution by Year of Birth"
