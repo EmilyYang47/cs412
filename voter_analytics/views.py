@@ -11,7 +11,7 @@ import plotly
 import plotly.graph_objs as go 
 from django.db.models import Count 
 
-YEARS = list(range(1915, 2026))  
+YEARS = list(range(1915, 2010))  
 YEARS.reverse()  
 
 class VotersListView(ListView): 
@@ -25,7 +25,7 @@ class VotersListView(ListView):
     def get_context_data(self, **kwargs): 
         '''provide context variables for use in template. '''
         context = super().get_context_data(**kwargs)
-        years = list(range(1915, 2026))  
+        years = list(range(1915, 2010))  
         years.reverse()  
         context['years'] = years
         return context 
@@ -41,27 +41,25 @@ class VotersListView(ListView):
             if party_affiliation:
                 results = results.filter(party_affiliation=party_affiliation) 
 
-        if 'min_birth_year' in self.request.GET: 
-            min_birth_year = self.request.GET['min_birth_year']
-            if min_birth_year: 
-                min_birth_year = int(min_birth_year)
-                years = list(range(min_birth_year, 2026))
-                selection = results.filter(date_of_birth__contains=str(years[0])) 
-                if len(years) >= 2:  
-                    for year in years[1:]: 
-                        selection = selection | results.filter(date_of_birth__contains=str(year)) 
-                results = selection 
-                
-        if 'max_birth_year' in self.request.GET: 
-            max_birth_year = self.request.GET['max_birth_year']
-            if max_birth_year: 
-                min_birth_year = int(min_birth_year)
-                years = list(range(1915, min_birth_year + 1))
-                selection = results.filter(date_of_birth__contains=str(years[0])) 
-                if len(years) >= 2:  
-                    for year in years[1:]: 
-                        selection = selection | results.filter(date_of_birth__contains=str(year)) 
-                results = selection 
+
+        # Birth Year filtering 
+        if ('min_birth_year' in self.request.GET) or ('max_birth_year' in self.request.GET): 
+            min_birth_year = 1915 
+            max_birth_year = 2010
+
+            if self.request.GET['min_birth_year']: 
+                min_birth_year = int(self.request.GET['min_birth_year'])
+
+            if self.request.GET['max_birth_year']: 
+                max_birth_year = int(self.request.GET['max_birth_year'])
+
+            years = list(range(min_birth_year, max_birth_year + 1)) 
+            selection = results.filter(date_of_birth__contains=str(years[0])) 
+            if len(years) >= 2:  
+                for year in years[1:]: 
+                    selection = selection | results.filter(date_of_birth__contains=str(year)) 
+            results = selection 
+
 
         if 'voter_score' in self.request.GET:
             voter_score = self.request.GET['voter_score']
@@ -108,27 +106,25 @@ class GraphsListView(ListView):
             if party_affiliation:
                 results = results.filter(party_affiliation=party_affiliation) 
 
-        if 'min_birth_year' in self.request.GET: 
-            min_birth_year = self.request.GET['min_birth_year']
-            if min_birth_year: 
-                min_birth_year = int(min_birth_year)
-                years = list(range(min_birth_year, 2026))
-                selection = results.filter(date_of_birth__contains=str(years[0])) 
-                if len(years) >= 2:  
-                    for year in years[1:]: 
-                        selection = selection | results.filter(date_of_birth__contains=str(year)) 
-                results = selection 
-                
-        if 'max_birth_year' in self.request.GET: 
-            max_birth_year = self.request.GET['max_birth_year']
-            if max_birth_year: 
-                min_birth_year = int(min_birth_year)
-                years = list(range(1915, min_birth_year + 1))
-                selection = results.filter(date_of_birth__contains=str(years[0])) 
-                if len(years) >= 2:  
-                    for year in years[1:]: 
-                        selection = selection | results.filter(date_of_birth__contains=str(year)) 
-                results = selection 
+
+        # Birth Year filtering 
+        if ('min_birth_year' in self.request.GET) or ('max_birth_year' in self.request.GET): 
+            min_birth_year = 1915 
+            max_birth_year = 2010
+
+            if self.request.GET['min_birth_year']: 
+                min_birth_year = int(self.request.GET['min_birth_year'])
+
+            if self.request.GET['max_birth_year']: 
+                max_birth_year = int(self.request.GET['max_birth_year'])
+
+            years = list(range(min_birth_year, max_birth_year + 1)) 
+            selection = results.filter(date_of_birth__contains=str(years[0])) 
+            if len(years) >= 2:  
+                for year in years[1:]: 
+                    selection = selection | results.filter(date_of_birth__contains=str(year)) 
+            results = selection 
+            
 
         if 'voter_score' in self.request.GET:
             voter_score = self.request.GET['voter_score']
