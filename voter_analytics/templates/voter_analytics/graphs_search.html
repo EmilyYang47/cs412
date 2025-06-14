@@ -1,0 +1,94 @@
+<!-- 
+File: graphs_search.html
+Author: Emily Yang (eyang4@bu.edu), 6/14/2025
+Description: a graphs_search page that filters the voters for graphs.      
+--> 
+
+<h1>Search Form</h1>
+
+<table>
+<form action="{% url 'graphs' %}">
+
+    <!-- Party affiliation dropdown -->
+    <tr>
+      <th>Party Affiliation:</th>
+      <td>
+        <select name="party_affiliation">
+            <option value="">-- Any --</option>
+            <option value="D ">D</option>
+            <option value="R ">R</option>
+            <option value="U ">U</option>
+            <option value="CC">CC</option> 
+            <option value="L ">L</option>
+            <option value="T ">T</option>
+            <option value="O ">O</option>
+            <option value="G ">G</option>
+            <option value="J ">J</option>
+            <option value="Q ">Q</option>
+            <option value="FF">FF</option>
+
+        </select>
+      </td>
+    </tr>
+
+    <!-- Minimum date of birth (a drop-down list by calendar year)) -->
+    <tr>
+      <th>Min Birth Year:</th>
+      <td>
+        <select name="min_birth_year">
+            <option value="">-- Any --</option>
+            {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %} 
+        </select>
+      </td>
+    </tr>
+
+    <!-- Maximum date of birth (a drop-down list by calendar year)) -->
+    <tr>
+      <th>Max Birth Year:</th>
+      <td>
+        <select name="max_birth_year">
+            <option value="">-- Any --</option>
+            {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+      </td>
+    </tr>
+
+    <!-- Voter score dropdown -->
+    <tr>
+      <th>Voter Score:</th>
+      <td>
+        <select name="voter_score">
+            <option value="">-- Any --</option> 
+            <option value="0">0</option> 
+            <option value="1">1</option> 
+            <option value="2">2</option> 
+            <option value="3">3</option> 
+            <option value="4">4</option> 
+            <option value="5">5</option> 
+        </select>
+      </td>
+    </tr>
+
+    <!-- Whether they voted in specific elections (check boxes) -->
+    <tr>
+      <th>Election Participation:</th>
+      <td>
+        <label><input type="checkbox" name="v20state" >v20state</label><br>
+        <label><input type="checkbox" name="v21town" >v21town</label><br>
+        <label><input type="checkbox" name="v21primary" >v21primaryy</label><br>
+        <label><input type="checkbox" name="v22general" >v22general</label><br>
+        <label><input type="checkbox" name="v23town" >v23town</label>
+      </td>
+    </tr>
+    
+    <tr>
+        <td><input type="submit"></td>
+        <td></td>
+    </tr>
+    
+</form>
+</table>
