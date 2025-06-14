@@ -93,6 +93,14 @@ class GraphsListView(ListView):
     template_name = 'voter_analytics/graphs.html'
     model = Voter 
     context_object_name = 'v' 
+
+    def get_context_data(self, **kwargs): 
+        '''provide context variables for use in template. '''
+        context = super().get_context_data(**kwargs)
+        years = list(range(1915, 2026))  
+        years.reverse()  
+        context['years'] = years
+        return context 
     
     def get_queryset(self):
         '''filter the voters ''' 
