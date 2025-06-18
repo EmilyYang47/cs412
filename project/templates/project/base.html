@@ -1,0 +1,39 @@
+<!-- 
+File: base.html
+Author: Emily Yang (eyang4@bu.edu), 6/17/2025
+Description: a base page that provides a header and navigation for the page, 
+as well as including any necessary style information. 
+--> 
+
+{% load static %} 
+
+<html> 
+    <head>
+        <title>Focus Tool</title> 
+        <script src="{% static 'timer.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'styles.css' %}"> 
+    </head> 
+
+    <body> 
+        <header>
+            <h1>Focus Tool</h1>
+                <nav>
+                    <a href="{% url 'timer' %}">Timer</a> |
+                    <a href="{% url 'todo_list' %}">Todo-List</a> 
+                </nav>
+            <hr>
+        </header> 
+
+        <main>
+        {% block content %} 
+        {% endblock %} 
+        </main> 
+
+        
+        <footer>
+            <hr> 
+            Creator of this web application: Emily Yang             
+        </footer> 
+
+    </body> 
+</html> 

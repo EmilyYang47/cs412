@@ -59,7 +59,7 @@ class CreateArticleView(LoginRequiredMixin, CreateView):
 
     def get_login_url(self): 
         '''return the URL for this app's login page. '''
-        return reverse('blog_login') 
+        return reverse('login') 
 
     def form_valid(self, form):
             '''
@@ -173,5 +173,5 @@ class UserRegistrationView(CreateView):
     
     def get_success_url(self):
         '''The URL to redirect to after creating a new User.'''
-        return reverse('blog_login') 
+        return reverse('login') 
     

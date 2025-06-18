@@ -1,0 +1,22 @@
+<!-- 
+File: todo_list.html
+Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+Description: a todo_list page to display all task descriptions. 
+--> 
+
+{% extends 'project/base.html' %} 
+
+{% block content %} 
+<h1> Todo-List </h1> 
+
+<div style="margin-left: 170px; margin-right: 250px;">  
+    <form action="{% url 'todo_list' %}" method="POST" style="margin-left: 200px; margin-right: 180px;"> 
+        {% for task in todo_list %} 
+        <input type="checkbox">
+        {{task}} <br> 
+        {% endfor %}
+    </form>
+</div> 
+
+
+{% endblock %} 
