@@ -7,16 +7,36 @@ Description: a todo_list page to display all task descriptions.
 {% extends 'project/base.html' %} 
 
 {% block content %} 
-<h1> Todo-List </h1> 
+<div style="margin-left: 400px; margin-right: 450px;">  
+    <h1> Todo-List </h1> 
 
-<div style="margin-left: 170px; margin-right: 250px;">  
-    <form action="{% url 'todo_list' %}" method="POST" style="margin-left: 200px; margin-right: 180px;"> 
-        {% for task in todo_list %} 
-        <input type="checkbox">
-        {{task}} <br> 
-        {% endfor %}
-    </form>
+    <div style="justify-content: center;">  
+        <form action="{% url 'update_complete_status' %}" method="POST" style="margin-left: 200px; margin-right: 180px;"> 
+            {% csrf_token %} 
+            {% for task_description in todo_list %}
+                <div class="task-wrapper">
+                    <input type="checkbox" name="completed_tasks" value="{{ task_description.id }}" {% if task_description.is_complete %}checked{% endif %}>
+                    {% if task_description.is_complete %} 
+                        <a href="{% url 'show_task_description' task_description.id %}">
+                            <p><i><s> {{ task_description.task }} </s></i></p>
+                        </a> 
+                    {% else %} 
+                        <a href="{% url 'show_task_description' task_description.id %}"> 
+                            <p> {{ task_description.task }} </p>
+                        </a>
+                    {% endif %} 
+                        <a class="delete-link" href="{% url 'delete_task_description' task_description.id %}">&#215;</a> 
+                </div>
+            {% endfor %}
+            <input type="submit" value="Update"> 
+        </form> 
+        <div style="margin-left: 200px; margin-right: 180px;">
+            <b><a href="{% url 'create_task' %}"> Create New Task </a></b> 
+        </div>
+    </div> 
 </div> 
+
+
 
 
 {% endblock %} 

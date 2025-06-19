@@ -1,0 +1,28 @@
+<!-- 
+File: show_timer.html
+Author: Emily Yang (eyang4@bu.edu), 5/29/2025
+Description: a create_profile_form page to display the HTML form to create a new Profile object. 
+--> 
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+{% load static %} 
+
+<div style="text-align: center;">
+    <h1>Focus Timer</h1> 
+    <div id="time_display" data-timer-id="{{ timer.id }}" data-tag-id="{{ timer.task.tag.id }}">
+        {{ timer.duration }}
+    </div>
+
+
+    <div>
+        <button id="control_btn">Start</button>
+    </div> 
+    <script src="{% static 'timer.js' %}"></script>
+
+</div>
+
+
+{% endblock %} 
+

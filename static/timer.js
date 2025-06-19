@@ -1,15 +1,13 @@
-let startTimestamp = null;
-let accumulatedTime = 0;
-
-let duration = 5; // 25 * 60 in real usage
+const durationElem = document.getElementById("time_display");
+const duration = parseInt(durationElem.textContent);
 let timeLeft = duration;
 let timer = null;
-let currentState = "Start"; // start, pause, resume
+let currentState = "Start";
 
 function updateDisplay() {
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const seconds = String(timeLeft % 60).padStart(2, "0");
-  document.getElementById("time-display").textContent = `${minutes}:${seconds}`;
+  document.getElementById("time_display").textContent = `${minutes}:${seconds}`;
 }
 
 function startTimer() {
@@ -21,12 +19,8 @@ function startTimer() {
       clearInterval(timer);
       timer = null;
       alert("Time's Up!");
-      timeLeft = duration; // ✅ 自动重置
-      updateDisplay();
-      currentState = "Start";
+      currentState = "End Session";
       updateControlButton();
-      accumulatedTime += Math.floor((Date.now() - startTimestamp) / 1000);
-      sendTimeToServer(); // 将 totalTime 发送到后端
       return;
     }
     timeLeft--;
@@ -39,8 +33,6 @@ function pauseTimer() {
   timer = null;
   currentState = "Resume";
   updateControlButton();
-  accumulatedTime += Math.floor((Date.now() - startTimestamp) / 1000);
-  sendTimeToServer();
 }
 
 function resumeTimer() {
@@ -49,24 +41,16 @@ function resumeTimer() {
   updateControlButton();
 }
 
-function resetTimer() {
-  clearInterval(timer);
-  timer = null;
-  timeLeft = duration;
-  currentState = "Start";
-  updateDisplay();
-  updateControlButton();
-  accumulatedTime += Math.floor((Date.now() - startTimestamp) / 1000);
-}
-
 function updateControlButton() {
-  const btn = document.getElementById("control-btn");
+  const btn = document.getElementById("control_btn");
   if (currentState === "Start") {
     btn.textContent = "Start";
   } else if (currentState === "Pause") {
     btn.textContent = "Pause";
   } else if (currentState === "Resume") {
     btn.textContent = "Resume";
+  } else if (currentState === "End Session") {
+    btn.textContent = "End Session";
   }
 }
 
@@ -78,29 +62,11 @@ function handleControlClick() {
     pauseTimer();
   } else if (currentState === "Resume") {
     resumeTimer();
+  } else if (currentState === "End Session") {
+    window.location.href = "update_time_spend";
+    return;
   }
   updateControlButton();
-}
-
-function sendTimeToServer() {
-  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
-  fetch("/update_focus_time/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrfToken,
-    },
-    body: JSON.stringify({
-      tag_id: selectedTagId,
-      seconds: accumulatedTime,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Time saved", data);
-      accumulatedTime = 0;
-    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -108,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateControlButton();
 
   document
-    .getElementById("control-btn")
+    .getElementById("control_btn")
     .addEventListener("click", handleControlClick);
-  document.getElementById("reset-btn").addEventListener("click", resetTimer);
 });

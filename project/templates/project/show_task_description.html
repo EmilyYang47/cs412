@@ -1,0 +1,37 @@
+<!-- 
+File: show_task_description.html
+Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+Description: a show_task_description page to display a single task description. 
+--> 
+
+{% extends 'project/base.html' %} 
+
+{% block content %}  
+{%load static%}
+
+<h1>{{ task_description.task }}</h1> 
+
+<div style="margin-left: 170px; justify-content: center">  
+    <b>Task Description: </b> {{ task_description.task }} <br>
+    <b>Tag: </b> {{ task_description.tag.tag }} <br>
+
+    {% if task_description.is_complete %}
+        <b> This task is completed </b>
+    {% else %} 
+        {% if task_description.due_time %}
+
+            <b> Due Time: </b> <div id="due_time"> {{task_description.due_time|date:"M d, Y H:i:s"}} </div> 
+            <b> Time Left: </b> <div id="countdown_box"></div> 
+            <script src="{% static 'time_left_counter.js' %}"></script>
+
+        {% endif %} 
+    {% endif %} 
+
+    <u> 
+        <p style="text-align: center;"> 
+            <b><a href="{% url 'update_task_description' task_description.id %}"> Update </a></b> 
+        </p> 
+    </u> 
+
+</div>
+{% endblock %} 

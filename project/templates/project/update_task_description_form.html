@@ -1,0 +1,26 @@
+<!-- 
+File: update_task_description_form.html
+Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+Description: a update_task_description_form page to display the HTML form to update the TaskDescription object. 
+--> 
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h1>Update Task: {{task_description.task}}</h1>
+
+<form action="{% url 'update_task_description' task_description.pk %}" method="POST" style="margin-left: 400px; margin-right: 250px;" >
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table> 
+
+    <input type="submit" name="submit" value="Update">
+</form> 
+
+<!-- Add a separate form for a concel button --> 
+<form action="{% url 'show_task_description' task_description.pk %}" method='GET' style="margin-left: 400px; margin-right: 250px;">
+    <input type="submit" value="Cancel"> 
+</form> 
+
+{% endblock %} 

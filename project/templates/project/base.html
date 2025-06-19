@@ -10,15 +10,14 @@ as well as including any necessary style information.
 <html> 
     <head>
         <title>Focus Tool</title> 
-        <script src="{% static 'timer.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'styles.css' %}"> 
+        <link rel="stylesheet" href="{% static 'styles-project.css' %}"> 
     </head> 
 
     <body> 
         <header>
             <h1>Focus Tool</h1>
                 <nav>
-                    <a href="{% url 'timer' %}">Timer</a> |
+                    <a href="{% url 'create_timer' %}">Start Study Session</a> |
                     <a href="{% url 'todo_list' %}">Todo-List</a> 
                 </nav>
             <hr>

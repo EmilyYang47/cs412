@@ -12,182 +12,129 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm 
 from django.contrib.auth import login 
 
-import random 
 
-# Create your views here.
+## Views to manage the todo-list: 
 
 class ShowAllTaskDescriptionView(ListView): 
-    '''Define a view class to show all Facebook user Profiles. ''' 
+    '''Define a view class to show all task descriptions. ''' 
 
     model = TaskDescription 
     template_name = "project/todo_list.html" 
     context_object_name = 'todo_list' 
 
-def timer_view(request): 
-    template_name = "project/timer.html" 
 
-    return render(request, template_name)
+class TaskCompleteStatusUpdate(View): 
+    '''A view to handle the task complete status modification request. ''' 
 
-# class ShowProfilePageView(DetailView): 
-#     '''Define a view class to show a single Facebook user Profile. ''' 
+    def post(self, request, *args, **kwargs): 
+        '''Modify the status. ''' 
+        print(request.POST)
+        all_tasks = TaskDescription.objects.all()
 
-#     model = Profile 
-#     template_name = "mini_fb/show_profile.html" 
-#     context_object_name = 'profile' 
+        completed_task_ids = request.POST.getlist('completed_tasks')
 
-# class CreateProfileView(CreateView): 
-#     '''A view to handle creation of a new Profile. ''' 
+        for task in all_tasks:
+            task.is_complete = str(task.id) in completed_task_ids
+            task.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after modifying the complete status. ''' 
+        return reverse('todo_list') 
     
-#     form_class = CreateProfileForm 
-#     template_name = "mini_fb/create_profile_form.html" 
 
-#     def get_context_data(self): 
-#         '''Return the dictionary of context variables for use in the templates. ''' 
+class ShowTaskDescriptionView(DetailView): 
+    '''Define a view class to show a Task Description. ''' 
 
-#         # calling the superclass method 
-#         context = super().get_context_data() 
-
-#         # find/add the profile to the context data 
-#         # retrieve the PK from the URL pattern 
-#         user_creation_form = UserCreationForm
-
-#         # add this profile into the context dictionary: 
-#         context['user_creation_form'] = user_creation_form 
-#         return context 
-    
-#     def form_valid(self, form): 
-#         '''a method to handle the form submission. ''' 
-
-#         # Reconstruct the UserCreationForm instance from the self.request.POST data 
-#         user_form = UserCreationForm(self.request.POST) 
-#         user = user_form.save() 
-
-#         # log the user in 
-#         login(self.request, user) 
-#         # attach the Django User to the Profile instance object 
-#         form.instance.user = user 
-#         # delegate the rest to the super class’ form_valid method. 
-#         return super().form_valid(form)   
-    
-    
-# class UpdateProfileView(LoginRequiredMixin, UpdateView): 
-#     '''A view to update an Profile and save it to the database.'''
-
-#     model = Profile  
-#     form_class = UpdateProfileForm
-#     template_name = "mini_fb/update_profile_form.html" 
-
-#     def get_object(self):
-#         '''Return the Profile object for the currently logged-in user.'''
-#         return Profile.objects.get(user=self.request.user) 
-
-#     def get_login_url(self): 
-#         '''return the URL required for login. ''' 
-#         return reverse('login') 
+    model = TaskDescription  
+    template_name = "project/show_task_description.html" 
+    context_object_name = 'task_description' 
 
 
-# class CreateStatusMessageView(LoginRequiredMixin, CreateView): 
-#     '''A view to create a new status message and save it to the database. ''' 
+class UpdateTaskDescriptionView(UpdateView): 
+    '''A view to update a task description and save it to the database.'''
 
-#     form_class = CreateStatusMessageForm 
-#     template_name = "mini_fb/create_status_form.html" 
+    model = TaskDescription  
+    form_class = UpdateTaskDescriptionForm
+    template_name = "project/update_task_description_form.html" 
+    context_object_name = 'task_description' 
 
-#     def get_context_data(self): 
-#         '''Return the dictionary of context variables for use in the templates. ''' 
-
-#         # calling the superclass method 
-#         context = super().get_context_data() 
-
-#         # find/add the profile to the context data 
-#         # retrieve the PK from the URL pattern 
-#         profile = Profile.objects.get(user=self.request.user) 
-
-#         # add this profile into the context dictionary: 
-#         context['profile'] = profile 
-#         return context 
-    
-#     def get_login_url(self): 
-#         '''return the URL required for login. ''' 
-#         return reverse('login') 
-    
-#     def form_valid(self, form): 
-#         '''a method to handle the form submission and saves the new object to the Django database. ''' 
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after updating this task description. ''' 
         
-#         # find the logged in user 
-#         user = self.request.user 
-#         # attach user to form instance (Profile object):   
-#         form.instance.user = user 
+        # create and return a URL: 
+        # retrieve the PK from the URL pattern 
+        pk = self.kwargs['pk'] 
 
-#         # retrieve the PK from the URL pattern 
-#         profile = Profile.objects.get(user=self.request.user) 
-#         # attach this profile to the status message 
-#         form.instance.profile = profile # set the FK 
-
-#         # save the status message to database
-#         sm = form.save() 
-
-#         # read the file from the form:
-#         files = self.request.FILES.getlist('files') 
-
-#         # for each file, create and store an Image object and a StatusImage object  
-#         for file in files: 
-#             # Create an Image object 
-#             image = Image(image_file=file, profile=profile) 
-#             image.save() 
-            
-#             # Create and save a StatusImage 
-#             status_image = StatusImage(status_message=sm, image=image) 
-#             status_image.save() 
-
-
-#         # delegate the work to the superclass method form_valid: 
-#         return super().form_valid(form) 
+        # call reverse to generate the URL for this Profile 
+        return reverse('show_task_description', kwargs={'pk': pk}) 
     
-#     def get_success_url(self): 
-#         '''Provide a URL to redirect to after creating a new status message. ''' 
 
-#         # create and return a URL: 
-#         # call reverse to generate the URL for this Profile 
-#         return reverse('show_profile', kwargs={'pk':Profile.objects.get(user=self.request.user).pk}) 
+class DeleteTaskDescriptionView(DeleteView): 
+    '''A view to delete a task. ''' 
+
+    model = TaskDescription 
+    template_name = "project/delete_task_form.html" 
+    context_object_name = 'task_description' 
+
+    # def get_login_url(self): 
+    #     '''return the URL required for login. ''' 
+    #     return reverse('login') 
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after deleting this task. ''' 
+        return reverse('todo_list') 
+
+class CreateTaskDescriptionView(CreateView): 
+    '''A view to handle creation of a new TaskDescription. ''' 
+    
+    form_class = CreateTaskDescriptionForm 
+    template_name = "project/create_task_description_form.html" 
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after creating this task. ''' 
+        return reverse('todo_list') 
+    
+    def form_valid(self, form):
+        '''
+        Handle the form submission to create a new TaskDescription. 
+        '''
+        print(f'CreateArticleView: form.cleaned_data={form.cleaned_data}') 
+
+        # find the logged in user
+        user = self.request.user
+        print(f"CreateArticleView user={user} article.user={user}") 
+        # attach user to form instance (Article object):
+        form.instance.user = user 
+        form.instance.is_complete = False 
+
+        # delegate work to the superclass version of this method
+        return super().form_valid(form) 
 
 
+## Views to manage the timer: 
+
+class CreateTimerView(CreateView): 
+    '''A view to handle creation of a new TaskDescription. ''' 
+    
+    form_class = CreateTimerForm 
+    template_name = "project/create_timer_form.html" 
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after creating this task. ''' 
+
+        # update the time_spent field of corresponding tag 
+        tag = self.object.task.tag 
+        tag.time_spent = self.object.duration 
+        tag.save() 
+
+        return reverse('timer', kwargs={'pk': self.object.pk})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from django.views.decorators.csrf import csrf_exempt
-# from django.http import JsonResponse
-# import json
-# from .models import TaskTag
-
-# @csrf_exempt
-# def update_focus_time(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         tag_id = data.get('tag_id')
-#         seconds = data.get('seconds')
-
-#         try:
-#             tag = TaskTag.objects.get(id=tag_id, user=request.user)
-#             tag.time_spent += seconds
-#             tag.save()
-#             return JsonResponse({'status': 'success', 'new_total': tag.time_spent})
-#         except TaskTag.DoesNotExist:
-#             return JsonResponse({'status': 'error', 'message': 'Tag not found'}, status=404)
+class ShowTimerView(DetailView): 
+    '''Define a view class to show a single Timer object. ''' 
+    
+    model = Timer  
+    template_name = "project/show_timer.html" 
+    context_object_name = 'timer' 

@@ -14,9 +14,7 @@ class TaskTag(models.Model):
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 
-        return f'Tag: {self.tag} User: {self.user}' 
-    
-    
+        return f'Tag: {self.tag}' 
 
 
 class TaskDescription(models.Model): 
@@ -24,6 +22,8 @@ class TaskDescription(models.Model):
     task = models.TextField(blank=False) 
     tag = models.ForeignKey(TaskTag, on_delete=models.CASCADE) 
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    is_complete = models.BooleanField(blank=False) 
+    due_time = models.DateTimeField(blank=True, null=True)  
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 
@@ -33,10 +33,12 @@ class Timer(models.Model):
     '''Encapsulate the data of an individual Timer. '''  
     duration = models.IntegerField(blank=False) 
     task = models.ForeignKey(TaskDescription, on_delete=models.CASCADE)  
+    timestamp = models.DateTimeField(auto_now=True) 
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 
-        return f'{self.tag} {self.duration}' 
+        return f'{self.task} {self.duration}' 
+
     
 class UserStatus(models.Model): 
     '''Encapsulate the data of an individual UserStatus of a user. '''  
