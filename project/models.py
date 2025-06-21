@@ -29,35 +29,45 @@ class TaskDescription(models.Model):
         '''return a string representation of this instance. ''' 
         return f'Task: {self.task} user: {self.user}' 
     
+
 class Timer(models.Model):  
     '''Encapsulate the data of an individual Timer. '''  
     duration = models.IntegerField(blank=False) 
     task = models.ForeignKey(TaskDescription, on_delete=models.CASCADE)  
     timestamp = models.DateTimeField(auto_now=True) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 
         return f'{self.task} {self.duration}' 
 
     
-class UserStatus(models.Model): 
-    '''Encapsulate the data of an individual UserStatus of a user. '''  
+class UserProfile(models.Model): 
+    '''Encapsulate the data of an individual Profile of a user. '''  
+    first_name = models.TextField(blank=True) 
+    last_name = models.TextField(blank=True) 
+    profile_image_file = models.ImageField(blank=True)     
+
     current_number_of_snacks = models.IntegerField(blank=False) 
-    current_number_of_toys = models.IntegerField(blank=False) 
-    current_number_of_foods = models.IntegerField(blank=False) 
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 
-        return f'{self.user}' 
+        return f'{self.first_name} {self.last_name}' 
     
+    def get_all_pets(self): 
+        '''return all of the pets of this profile. ''' 
+
+        pets = Pet.objects.filter(profile=self) 
+        return pets 
 
 
 class Pet(models.Model):  
     '''Encapsulate the data of an individual Pet. '''  
-    image = models.ImageField(blank=False) 
-    hunger_level = models.IntegerField(blank=False) 
+    image_url = models.URLField(blank=False) 
+    name = models.TextField(blank=True) 
     happiness_level = models.IntegerField(blank=False) 
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 

@@ -1,0 +1,40 @@
+<!-- 
+File: create_task_tag_form.html
+Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+Description: a create_task_tag_form page to display the HTML form to create a new TaskTag object. 
+--> 
+
+{% extends 'project/base.html' %} 
+
+{% block content %} 
+
+<h1> Create a New Tag </h1> 
+<br> 
+
+<form method = 'POST' style="margin-left: 400px; margin-right: 250px;"> 
+{% csrf_token %} 
+
+    <table > 
+        {% for field in form %} 
+        <tr> 
+            <th>{{field.name}}</th>
+            <td>{{field}}</td>
+        </tr> 
+        {% endfor %} 
+        
+        <tr>
+            <td></td> 
+            <td>
+                <input type='submit' value= 'Add Tag'>
+            </td>
+        </tr>
+
+    </table>
+</form> 
+
+<form action="{% url 'show_all_tags' %}" method='GET' style="margin-left: 400px; margin-right: 250px;">
+    <input type="submit" value="Cancel"> 
+</form> 
+
+
+{% endblock %} 

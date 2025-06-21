@@ -25,10 +25,10 @@ Description: a todo_list page to display all task descriptions.
                             <p> {{ task_description.task }} </p>
                         </a>
                     {% endif %} 
-                        <a class="delete-link" href="{% url 'delete_task_description' task_description.id %}">&#215;</a> 
+                    <a class="delete-link" href="{% url 'delete_task_description' task_description.id %}">&#215;</a> 
                 </div>
             {% endfor %}
-            <input type="submit" value="Update"> 
+            <input type="submit" value="Update Task Complete Status"> 
         </form> 
         <div style="margin-left: 200px; margin-right: 180px;">
             <b><a href="{% url 'create_task' %}"> Create New Task </a></b> 

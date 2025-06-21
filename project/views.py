@@ -15,7 +15,7 @@ from django.contrib.auth import login
 
 ## Views to manage the todo-list: 
 
-class ShowAllTaskDescriptionView(ListView): 
+class ShowAllTaskDescriptionsView(ListView): 
     '''Define a view class to show all task descriptions. ''' 
 
     model = TaskDescription 
@@ -127,7 +127,7 @@ class CreateTimerView(CreateView):
         # update the time_spent field of corresponding tag 
         tag = self.object.task.tag 
         tag.time_spent = self.object.duration 
-        tag.save() 
+        tag.save()         
 
         return reverse('timer', kwargs={'pk': self.object.pk})
 
@@ -138,3 +138,91 @@ class ShowTimerView(DetailView):
     model = Timer  
     template_name = "project/show_timer.html" 
     context_object_name = 'timer' 
+
+
+## Views to manage the tags: 
+
+class ShowAllTaskTagsView(ListView): 
+    '''Define a view class to show all task tags. ''' 
+
+    model = TaskTag 
+    template_name = "project/show_all_tags.html" 
+    context_object_name = 'all_tags' 
+
+
+class UpdateTaskTagView(UpdateView): 
+    '''A view to update a task tag and save it to the database.'''
+
+    model = TaskTag  
+    form_class = UpdateTaskTagForm
+    template_name = "project/update_task_tag_form.html" 
+    context_object_name = 'task_tag' 
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after updating this task tag. ''' 
+        
+        # create and return a URL: 
+        # retrieve the PK from the URL pattern 
+
+        # call reverse to generate the URL for this Profile 
+        return reverse('show_all_tags') 
+    
+
+class DeleteTaskTagView(DeleteView): 
+    '''A view to delete a task tag. ''' 
+
+    model = TaskTag 
+    template_name = "project/delete_task_tag_form.html" 
+    context_object_name = 'task_tag' 
+
+    # def get_login_url(self): 
+    #     '''return the URL required for login. ''' 
+    #     return reverse('login') 
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after deleting this task tag. ''' 
+        return reverse('show_all_tags') 
+
+
+class CreateTaskTagView(CreateView): 
+    '''A view to handle creation of a new TaskTag. ''' 
+    
+    form_class = CreateTaskTagForm 
+    template_name = "project/create_task_tag_form.html" 
+
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after creating this task. ''' 
+        return reverse('show_all_tags') 
+    
+    def form_valid(self, form):
+        ''' Handle the form submission to create a new TaskTag object. ''' 
+        form.instance.time_spent = 0 
+        
+        # # find the logged in user
+        # user = self.request.user
+        # print(f"CreateArticleView user={user} article.user={user}") 
+        # # attach user to form instance (Article object):
+        # form.instance.user = user 
+        # form.instance.is_complete = False 
+
+        # delegate work to the superclass version of this method
+        return super().form_valid(form) 
+
+
+## Views to manage the user status and pets: 
+
+class ShowAllUserProfileView(ListView): 
+    '''Define a view class to show a Task Description. ''' 
+
+    model = UserProfile  
+    template_name = "project/show_all_profiles.html" 
+    context_object_name = 'all_profiles' 
+
+class ShowUserProfileView(DetailView): 
+    '''Define a view class to show a Task Description. ''' 
+
+    model = UserProfile  
+    template_name = "project/show_profile.html" 
+    context_object_name = 'profile' 
+
+

@@ -1,0 +1,35 @@
+<!-- 
+File: show_all_tags.html
+Author: Emily Yang (eyang4@bu.edu), 6/20/2025
+Description: a show_all_tags page to display all task tags. 
+--> 
+
+{% extends 'project/base.html' %} 
+
+{% block content %} 
+<div style="margin-left: 400px; margin-right: 450px;">  
+    <h1> Task Tags </h1> 
+
+    <div style="justify-content: center;">  
+        <div style="margin-left: 200px; margin-right: 180px;"> 
+            {% for tag in all_tags %}
+            <div class="task-wrapper"> 
+                <p> {{tag.tag}} </p> 
+                <div> 
+                    <a href="{% url 'update_task_tag' tag.id %}"> Update </a> 
+                    <a class="delete-link" href="{% url 'delete_task_tag' tag.id %}">&#215;</a> 
+                </div>
+            </div>
+            {% endfor %}
+        </div> 
+        
+        <div style="margin-left: 200px; margin-right: 180px;">
+            <b><a href="{% url 'create_task_tag' %}"> Create New Tag </a></b> 
+        </div> 
+    </div> 
+</div> 
+
+
+
+
+{% endblock %} 

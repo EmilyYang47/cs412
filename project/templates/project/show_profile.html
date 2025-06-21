@@ -1,0 +1,29 @@
+<!-- 
+File: show_all_tags.html
+Author: Emily Yang (eyang4@bu.edu), 6/20/2025
+Description: a show_all_tags page to display all task tags. 
+--> 
+
+{% extends 'project/base.html' %} 
+
+{% block content %} 
+<div style="margin-left: 400px; margin-right: 450px;">  
+    <h1> {{profile.first_name}} {{profile.last_name}} </h1> 
+    Current number of snacks: {{profile.current_number_of_snacks}} 
+
+    <div style="justify-content: center;">  
+        <div style="margin-left: 200px; margin-right: 180px;"> 
+            {% for pet in profile.get_all_pets %} 
+                {{pet.name}} 
+                Happyness Level: {{pet.happiness_level}} 
+                <img src="{{pet.image_url}}" alt="" style="height:300px;" class="center"> 
+            {% endfor %}
+        </div> 
+       
+    </div> 
+</div> 
+
+
+
+
+{% endblock %} 
