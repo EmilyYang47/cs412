@@ -1,0 +1,31 @@
+<!-- 
+File: login.html
+Author: Emily Yang (eyang4@bu.edu), 6/20/2025
+Description: a login page. 
+--> 
+
+{% extends 'project/base.html' %}
+
+{% block content %} 
+
+<h1>Login to Focus Tool</h1> <br> 
+
+<div style="text-align: center;"> 
+    <form action="{% url 'project_login' %}" method="POST" >
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Login"> 
+        <!-- This basic login form works, but after login in 
+        assumed the existance of a page ar /registration/profile, which 
+        does not exist. --> 
+        {% if request.GET.next %} 
+        <input type="hidden" name="next" value="{{request.GET.next}}"> 
+        {% else %} 
+        <input type="hidden" name="next" value="{% url 'all_profiles' %}"> 
+        {% endif %} 
+    </form> 
+
+    Don't have an account? <a href="{% url 'create_user_profile' %}">Register here</a> 
+</div> 
+
+{% endblock %} 

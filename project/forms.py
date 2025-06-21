@@ -29,6 +29,13 @@ class CreateTimerForm(forms.ModelForm):
         model = Timer 
         fields = ['duration', 'task'] 
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user is not None:
+            self.fields['task'].queryset = TaskDescription.objects.filter(user=user)
+
 
 ## Forms for Task Tag 
 class UpdateTaskTagForm(forms.ModelForm): 
@@ -46,3 +53,23 @@ class CreateTaskTagForm(forms.ModelForm):
         '''associate this form with the TaskTag model from our database. ''' 
         model = TaskTag 
         fields = ['tag'] 
+
+
+## Forms for UserProfile 
+class CreateUserProfileForm(forms.ModelForm): 
+    '''A form to create a new UserProfile object. ''' 
+
+    class Meta: 
+        '''associate this form with the UserProfile model from our database. ''' 
+        model = UserProfile 
+        fields = ['first_name', 'last_name', 'profile_image_file'] 
+
+
+class UpdateUserProfileForm(forms.ModelForm): 
+    '''A form to create a new UserProfile object. ''' 
+
+    class Meta: 
+        '''associate this form with the UserProfile model from our database. ''' 
+        model = UserProfile 
+        fields = ['first_name', 'last_name', 'profile_image_file'] 
+

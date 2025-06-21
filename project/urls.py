@@ -3,8 +3,11 @@
 from django.urls import path
 from . import views
 
+# generic view for authentication/authorization 
+from django.contrib.auth import views as auth_views 
+
 urlpatterns = [ 
-    path('', views.ShowAllTaskDescriptionsView.as_view(), name='home'), 
+    path('', views.ShowUserProfileView.as_view(), name='home'), 
     path('todo_list/', views.ShowAllTaskDescriptionsView.as_view(), name='todo_list'), 
     # path('task-update/<int:pk>/', views.TaskUpdate.as_view(), name='task-update'), 
     path('tasks/update/', views.TaskCompleteStatusUpdate.as_view(), name='update_complete_status'), 
@@ -18,9 +21,18 @@ urlpatterns = [
     path('tag/<int:pk>/update', views.UpdateTaskTagView.as_view(), name='update_task_tag'), 
     path('tag/<int:pk>/delete', views.DeleteTaskTagView.as_view(), name='delete_task_tag'), 
     path('tag/create_task_tag', views.CreateTaskTagView.as_view(), name='create_task_tag'), 
-    path('profiles/', views.ShowAllUserProfileView.as_view(), name='all_profiles'), ## will delete later   
-    path('profile/<int:pk>', views.ShowUserProfileView.as_view(), name='profile'), ## will modify to associate with loggedin user later  
+    path('profiles/', views.ShowAllUserProfileView.as_view(), name='all_profiles'),    
+    path('profile/<int:pk>', views.ShowUserProfileView.as_view(), name='profile'), 
+    path('profile/update', views.UpdateUserProfileView.as_view(), name='update_user_profile'),  
 
+    path('feed_pet/<int:pk>', views.FeedPetView.as_view(), name="feed_pet"), 
+
+    # authorization-related URLs: 
+    path('project_login/', auth_views.LoginView.as_view(template_name='project/login.html'), name='project_login'), 
+    path('project_logout/', auth_views.LogoutView.as_view(next_page='project_logout_confirmation'), name='project_logout'), 
+    path('project_logged_out/', views.ProjectLogoutConfirmationView.as_view(), name='project_logout_confirmation'), 
+    path('create_user_profile/', views.CreateUserProfileView.as_view(), name="create_user_profile"), 
+    path('profile/<int:pk>/adopt_pet/', views.AdoptPetView.as_view(), name="adopt_pet"), 
 
 
 

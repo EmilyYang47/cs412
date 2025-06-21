@@ -1,0 +1,27 @@
+<!-- 
+File: create_user_profile_form.html
+Author: Emily Yang (eyang4@bu.edu), 6/20/2025
+Description: a create_user_profile_form page to display the HTML form to create a new UserProfile object. 
+--> 
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h1>Registration Form</h1>
+
+<!-- display the HTML form --> 
+<form action="{% url 'create_user_profile' %}" method="POST" style="margin-left: 400px; margin-right: 250px;" >
+    {% csrf_token %} 
+    <br><table>
+        {{user_creation_form}}
+    </table> <br>
+
+    <h1>Profile Creation</h1>
+    <table>
+        {{form.as_table}}
+    </table> 
+
+    <input type="submit" name="submit" value="Register">
+</form> 
+
+{% endblock %} 

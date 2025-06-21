@@ -55,9 +55,13 @@ class UserProfile(models.Model):
         '''return a string representation of this instance. ''' 
         return f'{self.first_name} {self.last_name}' 
     
+    def get_absolute_url(self): 
+        '''Return the URL to display one instance of this model. ''' 
+        return reverse('profile', kwargs={'pk': self.pk}) 
+    
+    
     def get_all_pets(self): 
         '''return all of the pets of this profile. ''' 
-
         pets = Pet.objects.filter(profile=self) 
         return pets 
 
@@ -66,7 +70,7 @@ class Pet(models.Model):
     '''Encapsulate the data of an individual Pet. '''  
     image_url = models.URLField(blank=False) 
     name = models.TextField(blank=True) 
-    happiness_level = models.IntegerField(blank=False) 
+    affection_level = models.IntegerField(blank=False) 
     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
 
     def __str__(self): 

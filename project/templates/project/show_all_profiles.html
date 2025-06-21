@@ -8,12 +8,16 @@ Description: a show_all_tags page to display all task tags.
 
 {% block content %} 
 <div style="margin-left: 400px; margin-right: 450px;">  
-    <h1> Profiles </h1> 
+    <h1> All Profiles </h1> 
 
     <div style="justify-content: center;">  
         <div style="margin-left: 200px; margin-right: 180px;"> 
             {% for p in all_profiles %} 
                 <a href="{% url 'profile' p.id %}"> {{p.first_name}} {{p.last_name}} </a> 
+                {% if p.profile_image_file %}
+                <img src="{{p.profile_image_file.url}}" alt="" style="height:100px;" class="center"> 
+                {% endif %} 
+                <hr> 
             {% endfor %}
         </div> 
        

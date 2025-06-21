@@ -1,0 +1,20 @@
+<!-- 
+File: logged_out.html
+Author: Emily Yang (eyang4@bu.edu), 6/20/2025
+Description: a logout confirmation page, which includes a link to log in again.  
+--> 
+
+
+{% extends 'project/base.html' %}
+
+{% block content %} 
+
+<h1>You have successfully logged out</h1> <br> 
+
+<div style="text-align: center;"> 
+
+    <a href="{% url 'project_login' %}"> Login </a> 
+    <br> <br> 
+    Don't have an account? <a href="{% url 'create_user_profile' %}">Register here</a> 
+</div>
+{% endblock %} 

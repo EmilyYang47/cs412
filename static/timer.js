@@ -63,7 +63,7 @@ function handleControlClick() {
   } else if (currentState === "Resume") {
     resumeTimer();
   } else if (currentState === "End Session") {
-    window.location.href = "update_time_spend";
+    window.location.href = "/project/todo_list";
     return;
   }
   updateControlButton();
