@@ -23,7 +23,9 @@ as well as including any necessary style information.
                     {% if request.user.is_authenticated %}  
                     <a href="{% url 'create_timer' %}">Start Study Session</a> |
                     <a href="{% url 'todo_list' %}">Todo-List</a> | 
-                    <a href="{% url 'show_all_tags' %}">Task Tags</a> 
+                    <a href="{% url 'show_all_tags' %}">Task Tags</a> | 
+                    <a href="{% url 'daily_focus_time_chart' %}">Daily Focus Time Chart</a> | 
+                    <a href="{% url 'my_profile' %}">My Profile</a>  
 
                     <form action="{% url 'project_logout' %}" method="POST"> 
                         {%csrf_token%}

@@ -21,7 +21,7 @@ Description: a login page.
         {% if request.GET.next %} 
         <input type="hidden" name="next" value="{{request.GET.next}}"> 
         {% else %} 
-        <input type="hidden" name="next" value="{% url 'all_profiles' %}"> 
+        <input type="hidden" name="next" value="{% url 'my_profile' %}"> 
         {% endif %} 
     </form> 
 

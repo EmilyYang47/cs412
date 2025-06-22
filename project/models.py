@@ -11,6 +11,7 @@ class TaskTag(models.Model):
     tag = models.TextField(blank=False) 
     time_spent = models.IntegerField(blank=False) 
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    timestamp = models.DateTimeField(auto_now=True) 
 
     def __str__(self): 
         '''return a string representation of this instance. ''' 

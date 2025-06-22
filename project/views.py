@@ -13,6 +13,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
 
 import random 
+import plotly
+import plotly.graph_objs as go 
+
+from django.utils import timezone
 
 
 # the images of pets  
@@ -43,7 +47,7 @@ class ShowAllTaskDescriptionsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         '''show only the task descriptions of current user. ''' 
-        return TaskDescription.objects.filter(user=self.request.user) 
+        return TaskDescription.objects.filter(user=self.request.user).order_by('is_complete', 'due_time') 
 
 
 class TaskCompleteStatusUpdate(LoginRequiredMixin, View): 
@@ -94,6 +98,11 @@ class UpdateTaskDescriptionView(LoginRequiredMixin, UpdateView):
     def get_login_url(self): 
         '''return the URL required for login. ''' 
         return reverse('project_login') 
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs 
 
     def get_success_url(self): 
         '''Provide a URL to redirect to after updating this task description. ''' 
@@ -134,6 +143,11 @@ class CreateTaskDescriptionView(LoginRequiredMixin, CreateView):
     def get_success_url(self): 
         '''Provide a URL to redirect to after creating this task. ''' 
         return reverse('todo_list') 
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs 
     
     def form_valid(self, form):
         '''
@@ -187,7 +201,15 @@ class CreateTimerView(LoginRequiredMixin, CreateView):
 
         # update the time_spent field of corresponding tag 
         tag = self.object.task.tag 
-        tag.time_spent += self.object.duration 
+        # create graph of focus time distribution of the day as bar chart: 
+        now = timezone.now() 
+        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0) 
+        
+        if tag.timestamp < start_of_today: 
+            tag.time_spent = self.object.duration 
+        else: 
+            tag.time_spent += self.object.duration 
+
         tag.save()  
 
         # update the current_number_of_snacks field of corresponding user profile  
@@ -205,7 +227,6 @@ class ShowTimerView(DetailView):
     model = Timer  
     template_name = "project/show_timer.html" 
     context_object_name = 'timer' 
-
     
 
 
@@ -310,6 +331,18 @@ class ShowUserProfileView(DetailView):
     template_name = "project/show_profile.html" 
     context_object_name = 'profile' 
 
+
+class ShowMyUserProfileView(DetailView): 
+    '''Define a view class to show a Task Description. ''' 
+
+    model = UserProfile  
+    template_name = "project/show_profile.html" 
+    context_object_name = 'profile' 
+    
+    def get_object(self):
+        '''Return the Profile object for the currently logged-in user.'''
+        return UserProfile.objects.get(user=self.request.user) 
+    
 
 class CreateUserProfileView(CreateView): 
     '''A view to handle creation of a new Profile. ''' 
@@ -432,7 +465,62 @@ class AdoptPetView(LoginRequiredMixin, View):
         return reverse('profile', kwargs={'pk': profile.pk}) 
 
 
-## Template view for logiut confirmation 
+## View to analyze time spent distribution 
+class FocusTimeChartView(DetailView):
+    '''View to show detail page for one result.''' 
+    
+    model = TaskTag 
+    template_name = 'project/show_daily_focus_time_chart.html'
+    context_object_name = 'tag' 
+
+    def get_object(self):
+        '''Return the Profile object for the currently logged-in user.''' 
+        now = timezone.now() 
+        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        return TaskTag.objects.filter(user=self.request.user).filter(timestamp__gte=start_of_today) 
+
+    def get_context_data(self, **kwargs) :
+        '''
+        Provide context variables for use in template
+        '''
+        # start with superclass context
+        context = super().get_context_data(**kwargs)
+        tags = context['tag'] 
+
+        # create graph of time spent on each tag as pie chart:
+        x = [t.tag for t in tags] 
+        y = [t.time_spent / 60 for t in tags] 
+        
+        fig = go.Pie(labels=x, values=y) 
+        title_text = f"Time Spent on Each Task Tag (hour)" 
+        graph_div_pie = plotly.offline.plot({"data": [fig], 
+                                         "layout_title_text": title_text,
+                                         }, 
+                                         auto_open=False, 
+                                         output_type="div") 
+        context['graph_div_pie'] = graph_div_pie 
+
+        # create graph of focus time distribution of the day as bar chart: 
+        now = timezone.now() 
+        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        timers = Timer.objects.filter(user=self.request.user).filter(timestamp__gte=start_of_today) 
+
+        x= [t.timestamp.strftime('%H:%M') for t in timers]
+        y = [t.duration / 60 for t in timers]        
+        
+        fig = go.Bar(x=x, y=y)
+        title_text = f"Focus Time Distribution of the Day (hour)" 
+        graph_div_bar = plotly.offline.plot({"data": [fig], 
+                                         "layout_title_text": title_text,
+                                         }, auto_open=False, output_type="div",
+                                         
+                                         ) 
+        context['graph_div_bar'] = graph_div_bar      
+
+        return context 
+
+
+## Template view for logout confirmation 
 
 class ProjectLogoutConfirmationView(TemplateView): 
     '''Define a view class to show the logout confirmation page. '''

@@ -1,0 +1,20 @@
+<!-- templates/marathon_analytics/result_detail.html -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Daily Focus Time Distribution</h1> 
+
+    <!-- show the pir chart --> 
+    <div class="row">
+        {{graph_div_pie|safe}} 
+    </div> 
+
+    <!-- show the bar chart -->     
+    <div class="row">
+        {{graph_div_bar|safe}} 
+    </div>
+</div>
+
+{% endblock %}

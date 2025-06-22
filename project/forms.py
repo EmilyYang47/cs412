@@ -10,6 +10,13 @@ class UpdateTaskDescriptionForm(forms.ModelForm):
         model = TaskDescription 
         fields = ['task', 'tag', 'is_complete', 'due_time'] 
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user is not None:
+            self.fields['tag'].queryset = TaskTag.objects.filter(user=user) 
+
 
 class CreateTaskDescriptionForm(forms.ModelForm): 
     '''A form to create the task description. ''' 
@@ -18,6 +25,13 @@ class CreateTaskDescriptionForm(forms.ModelForm):
         '''associate this form with the TaskDescription model from our database. ''' 
         model = TaskDescription 
         fields = ['task', 'tag', 'due_time'] 
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user is not None:
+            self.fields['tag'].queryset = TaskTag.objects.filter(user=user) 
 
 
 ## Forms for Timer 
