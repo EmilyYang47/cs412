@@ -1,19 +1,27 @@
+// File: timer.js
+// Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+// Description: The timer js file which creates the timer for a study session.
+
 const durationElem = document.getElementById("time_display");
 const duration = parseInt(durationElem.textContent);
 let timeLeft = duration;
 let timer = null;
 let currentState = "Start";
 
+// update the time display of the timer
 function updateDisplay() {
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const seconds = String(timeLeft % 60).padStart(2, "0");
   document.getElementById("time_display").textContent = `${minutes}:${seconds}`;
 }
 
+// For every second, decrease the remaining time by one second.
 function startTimer() {
   if (timer) return;
   startTimestamp = Date.now();
 
+  // When the time is up, terminate the timer and prompt a notation
+  // notifying the time is up.
   timer = setInterval(() => {
     if (timeLeft <= 0) {
       clearInterval(timer);
@@ -28,6 +36,7 @@ function startTimer() {
   }, 1000);
 }
 
+// The function to fause the timer.
 function pauseTimer() {
   clearInterval(timer);
   timer = null;
@@ -35,12 +44,14 @@ function pauseTimer() {
   updateControlButton();
 }
 
+// The function to resume the timer.
 function resumeTimer() {
   startTimer();
   currentState = "Pause";
   updateControlButton();
 }
 
+// The function to update the button based on current status.
 function updateControlButton() {
   const btn = document.getElementById("control_btn");
   if (currentState === "Start") {
@@ -54,6 +65,8 @@ function updateControlButton() {
   }
 }
 
+// The function to handle button click, implementing the corresponding
+// function when the button is clicked.
 function handleControlClick() {
   if (currentState === "Start") {
     startTimer();
@@ -69,6 +82,7 @@ function handleControlClick() {
   updateControlButton();
 }
 
+// Pass the needed variables into the templates.
 document.addEventListener("DOMContentLoaded", () => {
   updateDisplay();
   updateControlButton();

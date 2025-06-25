@@ -16,7 +16,11 @@ import random
 import plotly
 import plotly.graph_objs as go 
 
-from django.utils import timezone
+from django.views.generic import TemplateView
+from django.utils.timezone import localtime
+
+from zoneinfo import ZoneInfo 
+import datetime 
 
 
 # the images of pets  
@@ -29,7 +33,8 @@ IMAGES = ["https://upload.wikimedia.org/wikipedia/en/f/fd/Pusheen_the_Cat.png",
           "https://banner2.cleanpng.com/lnd/20240505/zxt/av80ljpty.webp" 
         ]  
 
-NAMES = ['Popcorn', 'Bread', 'Banana', 'Ice Cream', 'Hummus', 'Pasta']
+# the name of pets  
+NAMES = ['Popcorn', 'Bread', 'Banana', 'Ice Cream', 'Hummus', 'Pasta'] 
 
 
 ## Views to manage the todo-list: 
@@ -99,10 +104,26 @@ class UpdateTaskDescriptionView(LoginRequiredMixin, UpdateView):
         '''return the URL required for login. ''' 
         return reverse('project_login') 
     
-    def get_form_kwargs(self):
+    def get_form_kwargs(self): 
+        '''get form keyword arguments'''
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs 
+    
+    def form_valid(self, form):
+        '''
+        Handle the form submission to update this TaskDescription object. 
+        '''
+        print(f'CreateArticleView: form.cleaned_data={form.cleaned_data}') 
+
+        # find the logged in user
+        user = self.request.user
+        print(f"CreateArticleView user={user} article.user={user}") 
+        # attach user to form instance:
+        form.instance.user = user 
+
+        # delegate work to the superclass version of this method
+        return super().form_valid(form) 
 
     def get_success_url(self): 
         '''Provide a URL to redirect to after updating this task description. ''' 
@@ -111,7 +132,6 @@ class UpdateTaskDescriptionView(LoginRequiredMixin, UpdateView):
         # retrieve the PK from the URL pattern 
         pk = self.kwargs['pk'] 
 
-        # call reverse to generate the URL for this Profile 
         return reverse('show_task_description', kwargs={'pk': pk}) 
     
 
@@ -144,7 +164,8 @@ class CreateTaskDescriptionView(LoginRequiredMixin, CreateView):
         '''Provide a URL to redirect to after creating this task. ''' 
         return reverse('todo_list') 
     
-    def get_form_kwargs(self):
+    def get_form_kwargs(self): 
+        '''get form keyword arguments'''
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs 
@@ -158,7 +179,7 @@ class CreateTaskDescriptionView(LoginRequiredMixin, CreateView):
         # find the logged in user
         user = self.request.user
         print(f"CreateArticleView user={user} article.user={user}") 
-        # attach user to form instance (Article object):
+        # attach user to form instance: 
         form.instance.user = user 
         form.instance.is_complete = False 
 
@@ -169,7 +190,7 @@ class CreateTaskDescriptionView(LoginRequiredMixin, CreateView):
 ## Views to manage the timer: 
 
 class CreateTimerView(LoginRequiredMixin, CreateView): 
-    '''A view to handle creation of a new TaskDescription. ''' 
+    '''A view to handle creation of a new Timer. ''' 
     
     form_class = CreateTimerForm 
     template_name = "project/create_timer_form.html" 
@@ -177,42 +198,42 @@ class CreateTimerView(LoginRequiredMixin, CreateView):
     def get_login_url(self): 
         '''return the URL required for login. ''' 
         return reverse('login') 
-
-    def get_form_kwargs(self):
+    
+    def get_form_kwargs(self): 
+        '''get form keyword arguments'''
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs 
 
     def form_valid(self, form):
-        ''' Handle the form submission to create a new TaskTag object. ''' 
+        ''' Handle the form submission to create a new Timer object. ''' 
         form.instance.time_spent = 0 
         
         # find the logged in user
         user = self.request.user
         print(f"CreateArticleView user={user} article.user={user}") 
-        # attach user to form instance (Article object):
+        # attach user to form instance: 
         form.instance.user = user 
 
         # delegate work to the superclass version of this method
         return super().form_valid(form) 
 
     def get_success_url(self): 
-        '''Provide a URL to redirect to after creating this task. ''' 
+        '''Provide a URL to redirect to after creating this Timer. ''' 
 
         # update the time_spent field of corresponding tag 
         tag = self.object.task.tag 
-        # create graph of focus time distribution of the day as bar chart: 
-        now = timezone.now() 
-        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0) 
+        start_of_today = datetime.datetime.now(ZoneInfo("America/New_York")).replace(
+        hour=0, minute=0, second=0, microsecond=0 ) 
         
-        if tag.timestamp < start_of_today: 
+        if localtime(tag.timestamp) < start_of_today: 
             tag.time_spent = self.object.duration 
         else: 
             tag.time_spent += self.object.duration 
 
         tag.save()  
 
-        # update the current_number_of_snacks field of corresponding user profile  
+        # update the current_number_of_snacks field of the corresponding user profile  
         user = self.request.user 
         profile = UserProfile.objects.get(user=user)  
         profile.current_number_of_snacks += self.object.duration 
@@ -295,10 +316,6 @@ class CreateTaskTagView(LoginRequiredMixin, CreateView):
     def get_login_url(self): 
         '''return the URL required for login. ''' 
         return reverse('login') 
-
-    def get_success_url(self): 
-        '''Provide a URL to redirect to after creating this task. ''' 
-        return reverse('show_all_tags') 
     
     def form_valid(self, form):
         ''' Handle the form submission to create a new TaskTag object. ''' 
@@ -307,17 +324,21 @@ class CreateTaskTagView(LoginRequiredMixin, CreateView):
         # find the logged in user
         user = self.request.user
         print(f"CreateArticleView user={user} article.user={user}") 
-        # attach user to form instance (Article object):
+        # attach user to form instance: 
         form.instance.user = user 
 
         # delegate work to the superclass version of this method
         return super().form_valid(form) 
 
+    def get_success_url(self): 
+        '''Provide a URL to redirect to after creating this tag. ''' 
+        return reverse('show_all_tags') 
+
 
 ## Views to manage the user profiles: 
 
 class ShowAllUserProfileView(ListView): 
-    '''Define a view class to show a Task Description. ''' 
+    '''Define a view class to show all user profiles. ''' 
 
     model = UserProfile  
     template_name = "project/show_all_profiles.html" 
@@ -325,7 +346,7 @@ class ShowAllUserProfileView(ListView):
 
 
 class ShowUserProfileView(DetailView): 
-    '''Define a view class to show a Task Description. ''' 
+    '''Define a view class to show a single user profile. ''' 
 
     model = UserProfile  
     template_name = "project/show_profile.html" 
@@ -333,7 +354,7 @@ class ShowUserProfileView(DetailView):
 
 
 class ShowMyUserProfileView(DetailView): 
-    '''Define a view class to show a Task Description. ''' 
+    '''Define a view class to show the logged-in user's profile. ''' 
 
     model = UserProfile  
     template_name = "project/show_profile.html" 
@@ -345,7 +366,7 @@ class ShowMyUserProfileView(DetailView):
     
 
 class CreateUserProfileView(CreateView): 
-    '''A view to handle creation of a new Profile. ''' 
+    '''A view to handle creation of a new UserProfile. ''' 
     
     form_class = CreateUserProfileForm 
     template_name = "project/create_user_profile_form.html" 
@@ -356,11 +377,8 @@ class CreateUserProfileView(CreateView):
         # calling the superclass method 
         context = super().get_context_data() 
 
-        # find/add the profile to the context data 
-        # retrieve the PK from the URL pattern 
-        user_creation_form = UserCreationForm
-
-        # add this profile into the context dictionary: 
+        # add the UserCreationForm into the context dictionary: 
+        user_creation_form = UserCreationForm 
         context['user_creation_form'] = user_creation_form 
         return context 
     
@@ -373,7 +391,7 @@ class CreateUserProfileView(CreateView):
 
         # log the user in 
         login(self.request, user) 
-        # attach the Django User to the Profile instance object 
+        # attach the Django User to the UserProfile instance object 
         form.instance.user = user 
         form.instance.current_number_of_snacks = 0 
 
@@ -392,7 +410,7 @@ class CreateUserProfileView(CreateView):
 
 
 class UpdateUserProfileView(LoginRequiredMixin, UpdateView): 
-    '''A view to update a task tag and save it to the database.'''
+    '''A view to update a user profile and save it to the database.'''
 
     model = UserProfile  
     form_class = UpdateUserProfileForm
@@ -404,21 +422,21 @@ class UpdateUserProfileView(LoginRequiredMixin, UpdateView):
         return reverse('login') 
     
     def get_object(self):
-        '''Return the Profile object for the currently logged-in user.'''
+        '''Return the UserProfile object for the currently logged-in user.'''
         return UserProfile.objects.get(user=self.request.user) 
     
 
 ## Views to manage the pets: 
 
 class FeedPetView(LoginRequiredMixin, View): 
-    '''A view to handle the task complete status modification request. ''' 
+    '''A view to handle feed pet request. ''' 
 
     def get_login_url(self): 
         '''return the URL required for login. ''' 
         return reverse('project_login') 
 
     def post(self, request, *args, **kwargs): 
-        '''Modify the status. ''' 
+        '''Handle the post request, feed the pet. ''' 
 
         print(request.POST) 
          
@@ -427,6 +445,7 @@ class FeedPetView(LoginRequiredMixin, View):
         pet = Pet.objects.get(pk=pk) 
         pet.affection_level += 1 
         pet.save() 
+
         # update the current_number_of_snacks field of the corresponding user profile   
         user = self.request.user 
         profile = UserProfile.objects.get(user=user)  
@@ -436,88 +455,109 @@ class FeedPetView(LoginRequiredMixin, View):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self): 
-        '''Provide a URL to redirect to after modifying the complete status. ''' 
-        user = self.request.user
-        # attach user to form instance (Article object):
+        '''Provide a URL to redirect to after feeding the pet. ''' 
+
+        user = self.request.user 
+        # attach user to form instance:
         profile = UserProfile.objects.get(user=user)  
         return reverse('profile', kwargs={'pk': profile.pk}) 
 
 
+class AdoptPetConfirmationView(LoginRequiredMixin, TemplateView): 
+    '''Define a view class to show the adopt_pet_confirmation page. '''      
+    template_name = 'project/adopt_pet_confirmation_form.html' 
+
+    def get_login_url(self): 
+        '''return the URL required for login. ''' 
+        return reverse('project_login')     
+    
+    def get_context_data(self): 
+        '''Return the dictionary of context variables for use in the templates. ''' 
+
+        # calling the superclass method 
+        context = super().get_context_data() 
+        user = self.request.user
+        # attach the profile into the context dictionary  
+        profile = UserProfile.objects.get(user=user)  
+
+        context['profile'] = profile 
+        return context 
+
+
 class AdoptPetView(LoginRequiredMixin, View): 
-    '''A view to handle the task complete status modification request. ''' 
+    '''A view to handle the adopt pet request. ''' 
 
     def get_login_url(self): 
         '''return the URL required for login. ''' 
         return reverse('project_login') 
+    
+    def post(self, request, *args, **kwargs): 
+        '''Handle the post request, adopt a new pet. ''' 
+
+        image_url = random.choice(IMAGES)
+        name = random.choice(NAMES)
+        user = request.user
+        profile = UserProfile.objects.get(user=user)
+
+        if profile.current_number_of_snacks >= 7500:
+            pet = Pet(image_url=image_url, name=name, affection_level=0, profile=profile)
+            pet.save()
+            profile.current_number_of_snacks -= 7500
+            profile.save()
+
+        return HttpResponseRedirect(self.get_success_url()) 
 
     def get_success_url(self): 
-        '''Provide a URL to redirect to after modifying the complete status. ''' 
-        image_url = random.choice(IMAGES)  
-        name = random.choice(NAMES)  
-        user = self.request.user
-        profile = UserProfile.objects.get(user=user)  
-        
-        pet = Pet(image_url=image_url, name=name, affection_level=0, profile=profile) 
-        pet.save() 
-
-        profile.current_number_of_snacks -= 7500
-        
-        return reverse('profile', kwargs={'pk': profile.pk}) 
+        '''Provide a URL to redirect to after adopting the pet. ''' 
+        return reverse('my_profile') 
 
 
 ## View to analyze time spent distribution 
-class FocusTimeChartView(DetailView):
-    '''View to show detail page for one result.''' 
-    
-    model = TaskTag 
+
+class FocusTimeChartView(TemplateView): 
+    '''Define a view class to show the focus time chart page. ''' 
     template_name = 'project/show_daily_focus_time_chart.html'
-    context_object_name = 'tag' 
 
-    def get_object(self):
-        '''Return the Profile object for the currently logged-in user.''' 
-        now = timezone.now() 
-        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        return TaskTag.objects.filter(user=self.request.user).filter(timestamp__gte=start_of_today) 
+    def get_context_data(self, **kwargs): 
+        '''Return the dictionary of context variables for use in the templates. '''  
 
-    def get_context_data(self, **kwargs) :
-        '''
-        Provide context variables for use in template
-        '''
-        # start with superclass context
         context = super().get_context_data(**kwargs)
-        tags = context['tag'] 
+        user = self.request.user
 
-        # create graph of time spent on each tag as pie chart:
-        x = [t.tag for t in tags] 
-        y = [t.time_spent / 60 for t in tags] 
-        
-        fig = go.Pie(labels=x, values=y) 
-        title_text = f"Time Spent on Each Task Tag (hour)" 
-        graph_div_pie = plotly.offline.plot({"data": [fig], 
-                                         "layout_title_text": title_text,
-                                         }, 
-                                         auto_open=False, 
-                                         output_type="div") 
-        context['graph_div_pie'] = graph_div_pie 
+        start_of_today = datetime.datetime.now(ZoneInfo("America/New_York")).replace(
+        hour=0, minute=0, second=0, microsecond=0 )
+
+        # create graph of focus time distribution on task tags as pie chart: 
+        tags = TaskTag.objects.filter(user=user, timestamp__gte=start_of_today)
+        if tags.exists():
+            x = [t.tag for t in tags]
+            y = [t.time_spent / 60 for t in tags]  # convert to hour
+
+            pie_fig = go.Pie(labels=x, values=y)
+            pie_div = plotly.offline.plot({
+                "data": [pie_fig],
+                "layout_title_text": "Time Spent on Each Task Tag (hour)"
+            }, auto_open=False, output_type="div")
+            context['graph_div_pie'] = pie_div
+        else:
+            context['graph_div_pie'] = "<div>No study sessions yet</div>"              
 
         # create graph of focus time distribution of the day as bar chart: 
-        now = timezone.now() 
-        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        timers = Timer.objects.filter(user=self.request.user).filter(timestamp__gte=start_of_today) 
+        timers = Timer.objects.filter(user=user, timestamp__gte=start_of_today)
+        if timers.exists():
+            x = [localtime(t.timestamp).strftime('%H:%M') for t in timers]
+            y = [t.duration / 60 for t in timers]
 
-        x= [t.timestamp.strftime('%H:%M') for t in timers]
-        y = [t.duration / 60 for t in timers]        
-        
-        fig = go.Bar(x=x, y=y)
-        title_text = f"Focus Time Distribution of the Day (hour)" 
-        graph_div_bar = plotly.offline.plot({"data": [fig], 
-                                         "layout_title_text": title_text,
-                                         }, auto_open=False, output_type="div",
-                                         
-                                         ) 
-        context['graph_div_bar'] = graph_div_bar      
+            bar_fig = go.Bar(x=x, y=y)
+            bar_div = plotly.offline.plot({
+                "data": [bar_fig],
+                "layout_title_text": "Focus Time Distribution of the Day (hour)"
+            }, auto_open=False, output_type="div")
+            context['graph_div_bar'] = bar_div
+        else:
+            context['graph_div_bar'] = "<div>No focus sessions yet</div>"
 
-        return context 
+        return context
 
 
 ## Template view for logout confirmation 

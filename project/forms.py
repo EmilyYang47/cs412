@@ -1,3 +1,7 @@
+# File: forms.py
+# Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+# Description: The forms python file which creates the forms to add new model objects to the database.   
+
 from django import forms
 from .models import *  
 
@@ -10,7 +14,9 @@ class UpdateTaskDescriptionForm(forms.ModelForm):
         model = TaskDescription 
         fields = ['task', 'tag', 'is_complete', 'due_time'] 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
+        '''Only allow users to select task tags associated with their own account. ''' 
+
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
@@ -26,7 +32,9 @@ class CreateTaskDescriptionForm(forms.ModelForm):
         model = TaskDescription 
         fields = ['task', 'tag', 'due_time'] 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
+        '''Only allow users to select task tags associated with their own account. ''' 
+        
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
@@ -36,7 +44,7 @@ class CreateTaskDescriptionForm(forms.ModelForm):
 
 ## Forms for Timer 
 class CreateTimerForm(forms.ModelForm): 
-    '''A form to create the task description. ''' 
+    '''A form to create the timer. ''' 
 
     class Meta: 
         '''associate this form with the Timer model from our database. ''' 
@@ -80,7 +88,7 @@ class CreateUserProfileForm(forms.ModelForm):
 
 
 class UpdateUserProfileForm(forms.ModelForm): 
-    '''A form to create a new UserProfile object. ''' 
+    '''A form to update the UserProfile object. ''' 
 
     class Meta: 
         '''associate this form with the UserProfile model from our database. ''' 

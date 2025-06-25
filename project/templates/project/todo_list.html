@@ -11,7 +11,7 @@ Description: a todo_list page to display all task descriptions.
     <h1> Todo-List </h1> 
 
     <div style="justify-content: center;">  
-        <form action="{% url 'update_complete_status' %}" method="POST" style="margin-left: 200px; margin-right: 180px;"> 
+        <form action="{% url 'update_complete_status' %}" method="POST" > 
             {% csrf_token %} 
             {% for task_description in todo_list %}
                 <div class="task-wrapper">

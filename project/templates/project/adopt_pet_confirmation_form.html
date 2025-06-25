@@ -1,0 +1,27 @@
+<!-- 
+File: adopt_pet_confirmation_form.html
+Author: Emily Yang (eyang4@bu.edu), 6/24/2025
+Description: an adopt_pet_confirmation_form page to display the confirmation page for adopting a new pet.  
+--> 
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h1>Adopt a new pet?</h1>
+
+<div style="margin-left: 400px; margin-right: 250px;"> 
+    <p> You have {{ profile.current_number_of_snacks }} snacks. </p>
+    <p><b>Are you sure you want to adopt a new pet? This will cost you 7500 snacks.</b></p> 
+</div> 
+
+<form action="{% url 'adopt_pet' %}" method="POST" style="margin-left: 400px; margin-right: 250px;">
+    {% csrf_token %}
+    <input type="submit" value="Adopt">
+</form> 
+
+<form action="{% url 'my_profile' %}" method="GET" style="margin-left: 400px; margin-right: 250px;"> 
+    {% csrf_token %} 
+    <input type="submit" value="Cancel"> 
+</form>
+
+{% endblock %}

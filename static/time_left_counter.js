@@ -1,10 +1,14 @@
-console.log("Hiiii");
+// File: time_left_counter.js
+// Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+// Description: The time_left_counter js file which creates the countdown timer
+// showing how much time is left from current time to the due time of a task description.
 
 const dueTime = document.getElementById("due_time");
 const countdownBox = document.getElementById("countdown_box");
 
 const dueDate = Date.parse(dueTime.textContent);
 
+// For every second, update the countdown timer
 setInterval(() => {
   const now = new Date().getTime();
 

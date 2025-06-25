@@ -1,4 +1,6 @@
-
+# File: urls.py
+# Author: Emily Yang (eyang4@bu.edu), 6/18/2025
+# Description: The urls python file which matches urls to their corresponding pages.  
 
 from django.urls import path
 from . import views
@@ -9,7 +11,6 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [ 
     path('', views.ShowAllUserProfileView.as_view(), name='home'), 
     path('todo_list/', views.ShowAllTaskDescriptionsView.as_view(), name='todo_list'), 
-    # path('task-update/<int:pk>/', views.TaskUpdate.as_view(), name='task-update'), 
     path('tasks/update/', views.TaskCompleteStatusUpdate.as_view(), name='update_complete_status'), 
     path('task/<int:pk>', views.ShowTaskDescriptionView.as_view(), name='show_task_description'), 
     path('task/<int:pk>/update', views.UpdateTaskDescriptionView.as_view(), name='update_task_description'), 
@@ -29,7 +30,8 @@ urlpatterns = [
     path('my_profile/', views.ShowMyUserProfileView.as_view(), name='my_profile'),    
     path('profile/update', views.UpdateUserProfileView.as_view(), name='update_user_profile'),  
     path('feed_pet/<int:pk>', views.FeedPetView.as_view(), name="feed_pet"), 
-    path('profile/<int:pk>/adopt_pet/', views.AdoptPetView.as_view(), name="adopt_pet"), 
+    path('my_profile/adopt_pet/', views.AdoptPetView.as_view(), name="adopt_pet"), 
+    path('my_profile/adopt_pet_confirmation/', views.AdoptPetConfirmationView.as_view(), name="adopt_pet_confirmation"), 
     path('daily_focus_time_chart/', views.FocusTimeChartView.as_view(), name="daily_focus_time_chart"), 
 
 

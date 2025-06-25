@@ -28,7 +28,7 @@ Description: a show_all_tags page to display all task tags.
     <div style="justify-content: center;">  
         <div style="margin-left: 200px; margin-right: 180px;"> 
             {% for pet in profile.get_all_pets %} 
-                {{pet.name}} 
+                {{pet.name}} <br>
                 Affection Level: {{pet.affection_level}} 
 
                 {% if request.user.is_authenticated and request.user == profile.user %}    
@@ -48,9 +48,10 @@ Description: a show_all_tags page to display all task tags.
 
         {% if request.user.is_authenticated and request.user == profile.user %}    
             {% if profile.current_number_of_snacks >= 7500 %} 
-                <form action="{% url 'adopt_pet' profile.pk %}" method="POST" > 
+
+                <form action="{% url 'adopt_pet_confirmation' %}" method="GET" > 
                     {% csrf_token %} 
-                    <input type="submit" name="submit" value="Adopt a new pet (doing so would take you 7500 snacks)"> 
+                    <input type="submit" value="Adopt a new pet (doing so would take you 7500 snacks)"> 
                 </form> 
             {% endif %} 
         {% endif %}
