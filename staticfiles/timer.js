@@ -3,7 +3,7 @@
 // Description: The timer js file which creates the timer for a study session.
 
 const durationElem = document.getElementById("time_display");
-const duration = parseInt(durationElem.textContent);
+const duration = parseInt(durationElem.textContent); // should multiply by 60 to turn it into minutes in real application
 let timeLeft = duration;
 let timer = null;
 let currentState = "Start";
@@ -12,7 +12,11 @@ let currentState = "Start";
 function updateDisplay() {
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const seconds = String(timeLeft % 60).padStart(2, "0");
-  document.getElementById("time_display").textContent = `${minutes}:${seconds}`;
+
+  const h4 = document.querySelector("#time_display .timer-text");
+  if (h4) {
+    h4.textContent = `${minutes}:${seconds}`;
+  }
 }
 
 // For every second, decrease the remaining time by one second.
