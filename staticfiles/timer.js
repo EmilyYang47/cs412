@@ -80,7 +80,7 @@ function handleControlClick() {
   } else if (currentState === "Resume") {
     resumeTimer();
   } else if (currentState === "End Session") {
-    window.location.href = "/project/todo_list";
+    window.location.href = "eyang4/project/todo_list";
     return;
   }
   updateControlButton();
